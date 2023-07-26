@@ -1,4 +1,5 @@
 node_modules/
+src/config
 .expo/
 dist/
 npm-debug.*

@@ -4,8 +4,15 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 const fontScale = PixelRatio.getFontScale();
 
 const THEME = {
-    MAIN_BACKGROUND_COLOR: "#343541",
-    HEADER_BACKGROUND_COLOR: '#202123',
+    MAIN_BACKGROUND_COLOR: "#000000",
+    HEADER_BACKGROUND_COLOR: '#232325',
+    INPUT_LINE_BACKGROUND_COLOR: '#232325',
+    INPUT_LINE_TEXT_COLOR: '#FFFFFF',
+    NAV_BAR_COLOR: '#000000',
+    OWN_MESSAGE_BACKGROUND_COLOR: '#000',
+    OWN_MESSAGE_NAME_COLOR: '#605ba4',
+    MESSAGE_BACKGROUND_COLOR: '#000',
+    MESSAGE_NAME_COLOR: '#10a37f',
     INPUT_COLOR: '#40414f',
     TEXT_COLOR: '#fff',
     STATUSBAR_HEIGHT: StatusBar.currentHeight,
