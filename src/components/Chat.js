@@ -2,7 +2,8 @@ import React from 'react';
 import { Text, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
-import { getChatsMessages, getChatsSettings, getCurrentChat, getCurrentChatModel } from '../store/selectors';
+import { DotIndicator } from 'react-native-indicators';
+import { getChatsMessages, getChatsSettings, getCurrentChat, getCurrentChatModel, getState } from '../store/selectors';
 import THEME from '../styles/theme';
 
 import HumanIcon from '../assets/ChatIcons/HumanIcon.png';
@@ -12,6 +13,8 @@ const Chat = () => {
     const chatsSettings = useSelector( getChatsSettings );
     const currentChat = useSelector( getCurrentChat );
     const currentChatModel = useSelector( getCurrentChatModel );
+
+    console.log('render');
 
     if( chatsMessages[ currentChat ].length === 0 ) {
         return (
@@ -33,7 +36,7 @@ const Chat = () => {
 
         const items = messages.map(( element, key ) => {
             
-            if( element['type'] === 'human' ) {
+            if( element['role'] === 'user' ) {
                 messageBackGroundColor = THEME.OWN_MESSAGE_BACKGROUND_COLOR;
                 messageIcon = HumanIcon;
                 messageName = 'YOU';
@@ -52,7 +55,13 @@ const Chat = () => {
                     </View>
                     <View style={ styles.messageTextContainer } >
                         <Text style={{ ...styles.messageNameContainer, color: messageNameColor }}>{ messageName }</Text>
-                        <Text style={ styles.messageText }>{ element['text'] }</Text>
+                        <Text style={ styles.messageText }>{ element['content'] }</Text>
+                        <View style={ styles.responseWaitingContainer }>
+                            <Text style={ styles.responseWaitingText }>Ожидаем ответ</Text>
+                            <View style={ styles.dots }>
+                                <DotIndicator color='white' size={ 2 } count={ 3 }/>
+                            </View>
+                        </View>
                     </View>
                 </View>
             )
@@ -103,6 +112,19 @@ const styles = StyleSheet.create({
     },
     messageNameContainer: {
         fontSize: THEME.FONT30
+    },
+    responseWaitingContainer: {
+        marginTop: hp('0.3%'),
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    responseWaitingText: {
+        fontStyle: 'italic',
+        fontSize: THEME.FONT22,
+        color: THEME.TEXT_COLOR,
+    },
+    dots: {
+        marginTop: hp('1.5%')
     },
     messageTextContainer: {
         width: wp('86%'),

@@ -6,9 +6,9 @@ const initialState = {
     chatsMessages: [],
     chatsSettings: [
         {
-            model: 'gpt-3.5-turbo',
             icon: ChatGPTIcon,
-            chatName: 'CHATGPT'
+            chatName: 'CHATGPT',
+            api: 'chatGpt35API'
         }
     ],
     currentChat: 0,
@@ -60,35 +60,3 @@ const reducer = ( state = initialState, action ) => {
 }
 
 export default reducer;
-
-
-
-//const axios = require('axios');
-
-// Функция для отправки запроса к ChatGPT
-/*async function chatWithGPT(message) {
-  try {
-    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: 'text-davinci-003', // Имя модели GPT для чата
-      messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: message }],
-    }, {
-      headers: {
-        'Authorization': 'Bearer YOUR_API_KEY', // Замените YOUR_API_KEY на ваш ключ API OpenAI
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const completions = response.data.choices[0].message.content;
-    return completions;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}*/
-
-// Пример использования функции chatWithGPT
-/*(async () => {
-  const userInput = 'Привет! Как ты можешь мне помочь?'; // Ввод пользователя
-  const completions = await chatWithGPT(userInput);
-  console.log('Ответ GPT:', completions);
-})();*/
