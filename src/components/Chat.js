@@ -1,22 +1,22 @@
 import React from 'react';
 import { Text, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getCurrentChatModel, getState } from '../store/selectors';
 import THEME from '../styles/theme';
 
 import HumanIcon from '../assets/ChatIcons/HumanIcon.png';
 
-const Chat = () => {
-    const chatsMessages = useSelector( getChatsMessages );
-    const chatsSettings = useSelector( getChatsSettings );
+const Chat = ({ isReplyArrived }) => {
     const currentChat = useSelector( getCurrentChat );
     const currentChatModel = useSelector( getCurrentChatModel );
-
+    const chatsMessages = useSelector( getChatsMessages )[ currentChat ];
+    const chatsSettings = useSelector( getChatsSettings )[ currentChatModel ];
+    
     console.log('render');
 
-    if( chatsMessages[ currentChat ].length === 0 ) {
+    if( !chatsMessages?.length ) {
         return (
             <View style={{ ...styles.container, alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={ styles.noMessagesText }>
@@ -27,24 +27,19 @@ const Chat = () => {
     }
 
     const displayMessages = () => {
-        const messages = chatsMessages[ currentChat ];
-        const chatSettings = chatsSettings[ currentChatModel ];
-        let messageBackGroundColor;
-        let messageNameColor;
-        let messageIcon;
-        let messageName;
+        let messageBackGroundColor, messageNameColor, messageIcon, messageName;
 
-        const items = messages.map(( element, key ) => {
+        const items = chatsMessages.map(( element, key ) => {
             
-            if( element['role'] === 'user' ) {
+            if(( key % 2 ) === 0 ) {
                 messageBackGroundColor = THEME.OWN_MESSAGE_BACKGROUND_COLOR;
                 messageIcon = HumanIcon;
                 messageName = 'YOU';
                 messageNameColor = THEME.OWN_MESSAGE_NAME_COLOR;
             } else {
                 messageBackGroundColor = THEME.MESSAGE_BACKGROUND_COLOR;
-                messageIcon = chatSettings.icon;
-                messageName = chatSettings.chatName;
+                messageIcon = chatsSettings.icon;
+                messageName = chatsSettings.chatName;
                 messageNameColor = THEME.MESSAGE_NAME_COLOR;
             }
 
@@ -55,13 +50,7 @@ const Chat = () => {
                     </View>
                     <View style={ styles.messageTextContainer } >
                         <Text style={{ ...styles.messageNameContainer, color: messageNameColor }}>{ messageName }</Text>
-                        <Text style={ styles.messageText }>{ element['content'] }</Text>
-                        <View style={ styles.responseWaitingContainer }>
-                            <Text style={ styles.responseWaitingText }>Ожидаем ответ</Text>
-                            <View style={ styles.dots }>
-                                <DotIndicator color='white' size={ 2 } count={ 3 }/>
-                            </View>
-                        </View>
+                        <Text style={ styles.messageText } selectable={true}>{ element['content'] }</Text>
                     </View>
                 </View>
             )
@@ -71,11 +60,28 @@ const Chat = () => {
             <>{ items }</>
         )
     }
+
+    const showDotIndicator = () => {
+        if( isReplyArrived ) {
+            return ( <></> )
+        }
+
+        return (
+            <View style={ styles.responseWaitingContainer }>
+                <Text style={ styles.responseWaitingText }>Ожидаем ответ</Text>
+                <View style={ styles.dots }>
+                    <DotIndicator color='white' size={ 2 } count={ 3 }/>
+                </View>
+            </View>
+        )
+
+    }
     
     return (
         <View style={ styles.container }>
             <ScrollView>
-                { displayMessages() } 
+                { displayMessages() }
+                { showDotIndicator() }
             </ScrollView>
         </View>
     )   
@@ -84,7 +90,8 @@ const Chat = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: hp('2%')
+        marginTop: hp('1%'),
+        marginBottom: hp('1%')
     },
     noMessagesText: {
         color: THEME.TEXT_COLOR,
@@ -93,7 +100,7 @@ const styles = StyleSheet.create({
     },
     messageText: {
         color: THEME.TEXT_COLOR,
-        fontSize: THEME.FONT25
+        fontSize: THEME.FONT22
     },
     messageContainer: {
         width: wp('96%'),
@@ -114,7 +121,7 @@ const styles = StyleSheet.create({
         fontSize: THEME.FONT30
     },
     responseWaitingContainer: {
-        marginTop: hp('0.3%'),
+        marginLeft: wp('12%'),
         flexDirection: 'row',
         justifyContent: 'flex-start',
     },

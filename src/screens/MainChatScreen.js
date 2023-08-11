@@ -4,59 +4,20 @@ import { View, StyleSheet, StatusBar, TextInput, BackHandler } from 'react-nativ
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
 import { APIs } from '../APIs/APIs';
+import InputField from '../components/InputField';
 import { getChatsMessages, getChatsSettings, getCurrentChat } from '../store/selectors';
 import { sendMessageToChatAction, clearChatAction } from '../store/actions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Chat from '../components/Chat';
 import THEME from '../styles/theme';
 
-const InputField = ({ sendMessageToChat, clearChat, inputHeight, setInputHeight }) => {
-    const [ message, setMessage ] = useState('');
-
-    return (
-        <View style={ styles.inputContainer }>
-            <View style={{ ...styles.clearChatIcon, height: inputHeight }}>
-                <Icon 
-                    name={ 'close-outline' } 
-                    color={ THEME.INPUT_LINE_TEXT_COLOR  } 
-                    size={ 35 }
-                    onPress={ () => clearChat() }
-                />
-            </View>
-            <View style={{ ...styles.input, height: inputHeight }}>
-                <TextInput
-                    style={{ ...styles.textInput, height: inputHeight }}
-                    multiline={ true }
-                    onContentSizeChange={( event ) => {
-                        setInputHeight( event.nativeEvent.contentSize.height );
-                    }}
-                    onChangeText={ setMessage }
-                    value={ message }
-                />
-            </View>
-            <View style={{ ...styles.sendTextVoice, height: inputHeight }} >
-                <Icon 
-                    name={ 'send' } 
-                    color={ THEME.INPUT_LINE_TEXT_COLOR  } 
-                    size={ 30 } 
-                    onPress={ () => {
-                        sendMessageToChat( message );
-                        setMessage('');
-                    }}
-                />
-            </View>
-        </View>
-    )
-
-}
-
 const MainChatScreen = () => {
-    const chatSettings = useSelector( getChatsSettings );
+    const [ isReplyArrived, setIsReplyArrived ] = useState( true );
     const currentChat = useSelector( getCurrentChat );
+    const { api, reqMessageTemplate, resMessageTemplate } = useSelector( getChatsSettings )[ currentChat ];
     const chatMessages = useSelector( getChatsMessages )[ currentChat ];
     const dispatch = useDispatch();
     const [ , forceUpdate ] = useReducer(x => x + 1, 0);
-    const [ inputHeight, setInputHeight ] = useState( 46 );
 
     useEffect(() => {
         NavigationBar.setBackgroundColorAsync( THEME.NAV_BAR_COLOR );
@@ -66,36 +27,30 @@ const MainChatScreen = () => {
         return () => backHandler.remove();
     })
 
-    const sendMessageToChat = async ( text ) => {
-        if(text === '') return;
-        setInputHeight(46);
+    const sendMessageToChat = async ( message ) => {
+        if( message === '' ) return;
 
-        const userMessage = {
-            'role': 'user',
-            'content': text
-        }
-
+        setIsReplyArrived( false );
+    
+        const userMessage = { ...reqMessageTemplate, 'content': message };
         dispatch(sendMessageToChatAction( userMessage ));
-
         forceUpdate();
 
-        const selectedAPI = chatSettings[ currentChat ].api;
-        const response = await APIs[ selectedAPI ].chat( chatMessages );
-        //const response = 'Столицей Франции является город Париж';
-
-        const robotMessage = {
-            'role': 'assistant',
-            'content': response
-        }
-
+        //const response = await APIs[ api ].chat( chatMessages );
+        const response = 'Столицей Франции является город Париж';
+        const robotMessage = { ...resMessageTemplate, 'content': response };
+       setTimeout(() => {
+            setIsReplyArrived( true );
+            dispatch(sendMessageToChatAction( robotMessage ));
+            forceUpdate();
+        }, 3000);
+        /*setIsReplyArrived( true );
         dispatch(sendMessageToChatAction( robotMessage ));
-
-        forceUpdate();
-
-        console.log('Ответ GPT:', response);        
+        forceUpdate(); */
     }
 
     const clearChat = () => {
+        if( chatMessages.length === 0 ) return;
         dispatch( clearChatAction() );
         forceUpdate();
     }
@@ -107,13 +62,8 @@ const MainChatScreen = () => {
                 <Icon style={ styles.icon } name={ 'menu' } color={ THEME.TEXT_COLOR } size={ 35 }/>
                 <Icon style={ styles.icon } name={ 'settings-outline' } color={ THEME.TEXT_COLOR  } size={ 35 }/>
             </View>
-            <Chat />
-            <InputField 
-                clearChat={ clearChat } 
-                sendMessageToChat={ sendMessageToChat } 
-                inputHeight={ inputHeight }
-                setInputHeight={ setInputHeight }
-            />
+            <Chat isReplyArrived={ isReplyArrived }/>
+            <InputField clearChat={ clearChat } sendMessageToChat={ sendMessageToChat } isReplyArrived={ isReplyArrived } />
         </View>
     )
 }
@@ -135,7 +85,7 @@ const styles = StyleSheet.create({
     icon: {
         alignSelf: 'center'
     },
-    inputContainer: {
+    /*inputContainer: {
         backgroundColor: THEME.INPUT_LINE_BACKGROUND_COLOR,
         flexDirection: 'row',
         alignItems: 'center',
@@ -172,42 +122,7 @@ const styles = StyleSheet.create({
     text: {
         color: THEME.TEXT_COLOR,
         fontSize: THEME.FONT50
-    }
+    }*/
 })
 
 export default MainChatScreen;
-
-
-/*
-
-<View style={ styles.inputContainer }>
-                <View style={{ ...styles.clearChatIcon, height: inputHeight }}>
-                    <Icon 
-                        name={ 'close-outline' } 
-                        color={ THEME.INPUT_LINE_TEXT_COLOR  } 
-                        size={ 35 }
-                        onPress={ () => clearChat() }
-                    />
-                </View>
-                <View style={{ ...styles.input, height: inputHeight }}>
-                    <TextInput
-                        ref={ textInput }
-                        style={{ ...styles.textInput, height: inputHeight }}
-                        multiline={ true }
-                        onContentSizeChange={( event ) => {
-                            setInputHeight( event.nativeEvent.contentSize.height );
-                        }}
-                        onChangeText={( value ) => message.current = value }
-                    />
-                </View>
-                <View style={{ ...styles.sendTextVoice, height: inputHeight }} >
-                    <Icon 
-                        name={ 'send' } 
-                        color={ THEME.INPUT_LINE_TEXT_COLOR  } 
-                        size={ 30 } 
-                        onPress={ () => sendMessageToChat( message.current ) }
-                    />
-                </View>
-            </View>
-
-*/            

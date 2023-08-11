@@ -8,7 +8,15 @@ const initialState = {
         {
             icon: ChatGPTIcon,
             chatName: 'CHATGPT',
-            api: 'chatGpt35API'
+            api: 'chatGpt35API',
+            reqMessageTemplate: {
+                'role': 'user',
+                'content': ''
+            },
+            resMessageTemplate: {
+                'role': 'assistant',
+                'content': ''
+            }
         }
     ],
     currentChat: 0,
@@ -45,9 +53,9 @@ const clearChat = ( state ) => {
 const reducer = ( state = initialState, action ) => {
     switch( action.type ) {
         case 'LOAD_APP_DATA':
-            saveDataToStore( 'APP_DATA', null );
-            //if ( action.payload ) return action.payload;
-            //return saveState( 'APP_DATA', initialState );
+            //saveDataToStore( 'APP_DATA', null );
+            if ( action.payload ) return action.payload;
+            return saveState( 'APP_DATA', initialState );
         case 'ADD_NEW_CHAT': 
             return addNewChat( state );
         case 'SEND_MESSAGE_TO_CHAT':
