@@ -3,14 +3,15 @@ import { Text, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
-import { getChatsMessages, getChatsSettings, getCurrentChat, getCurrentChatModel, getState } from '../store/selectors';
+import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
 import THEME from '../styles/theme';
 
 import HumanIcon from '../assets/ChatIcons/HumanIcon.png';
+import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
 
 const Chat = ({ isReplyArrived }) => {
     const currentChat = useSelector( getCurrentChat );
-    const currentChatModel = useSelector( getCurrentChatModel );
+    const currentChatModel = useSelector( getChatsModels )[ currentChat ];
     const chatsMessages = useSelector( getChatsMessages )[ currentChat ];
     const chatsSettings = useSelector( getChatsSettings )[ currentChatModel ];
     
@@ -28,6 +29,7 @@ const Chat = ({ isReplyArrived }) => {
 
     const displayMessages = () => {
         let messageBackGroundColor, messageNameColor, messageIcon, messageName;
+        const chatIcons = [ ChatGPTIcon ];
 
         const items = chatsMessages.map(( element, key ) => {
             
@@ -38,7 +40,7 @@ const Chat = ({ isReplyArrived }) => {
                 messageNameColor = THEME.OWN_MESSAGE_NAME_COLOR;
             } else {
                 messageBackGroundColor = THEME.MESSAGE_BACKGROUND_COLOR;
-                messageIcon = chatsSettings.icon;
+                messageIcon = chatIcons[ chatsSettings.iconNum ];
                 messageName = chatsSettings.chatName;
                 messageNameColor = THEME.MESSAGE_NAME_COLOR;
             }

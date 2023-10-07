@@ -10,9 +10,10 @@ export const loadAppDataAction = () => {
     };
 }
 
-export const addNewChatAction = () => {
+export const addNewChatAction = ( chatModel = 0 ) => {
     return {
         type: 'ADD_NEW_CHAT',
+        payload: chatModel
     }
 }
 

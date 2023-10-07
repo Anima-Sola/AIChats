@@ -22,7 +22,7 @@ const MainChatScreen = () => {
     const dispatch = useDispatch();
     const [ , forceUpdate ] = useReducer(x => x + 1, 0);
 
-        //Detect slide to the right to show side menu
+    //Detect slide to the right to show side menu
     const flingRightGesture = Gesture.Fling()
         .direction(Directions.RIGHT)
         .onStart(() => {
@@ -47,17 +47,17 @@ const MainChatScreen = () => {
         dispatch(sendMessageToChatAction( userMessage ));
         forceUpdate();
 
-        const response = await APIs[ api ].chat( chatMessages );
-        //const response = 'Столицей Франции является город Париж';
+        //const response = await APIs[ api ].chat( chatMessages );
+        const response = 'Столицей Франции является город Париж';
         const robotMessage = { ...resMessageTemplate, 'content': response };
-       /*setTimeout(() => {
+        setTimeout(() => {
             setIsReplyArrived( true );
             dispatch(sendMessageToChatAction( robotMessage ));
             forceUpdate();
-        }, 3000);*/
-        setIsReplyArrived( true );
+        }, 1000);
+        /*setIsReplyArrived( true );
         dispatch(sendMessageToChatAction( robotMessage ));
-        forceUpdate(); 
+        forceUpdate(); */
     }
 
     const clearChat = () => {

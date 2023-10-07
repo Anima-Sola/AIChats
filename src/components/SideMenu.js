@@ -1,14 +1,21 @@
 //Side menu that opens by swipe right gesture
 import React, { useRef, useImperativeHandle, forwardRef } from 'react';
 import { useFocusEffect } from "@react-navigation/native";
-import { Text, View, StyleSheet, Animated, Pressable } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { Text, View, StyleSheet, Animated, Pressable, Image } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useDispatch, useSelector } from 'react-redux';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons';
+import { getChatsModels, getChatsMessages, getChatsSettings, getCurrentChat } from '../store/selectors';
 import THEME from '../styles/theme';
 
+import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
+
 const SideMenu = ( props, ref ) => {
-    const dispatch = useDispatch();
+    const currentChat = useSelector( getCurrentChat );
+    const chatsModels = useSelector( getChatsModels );
+    const chatsMessages = useSelector( getChatsMessages )[ currentChat ];
+    const chatsSettings = useSelector( getChatsSettings );
     const animSideMenu = useRef(new Animated.Value( - THEME.SCREEN_WIDTH )).current;
     const animOverlayOpacity = useRef(new Animated.Value(0)).current;
 
@@ -75,6 +82,45 @@ const SideMenu = ( props, ref ) => {
             hideSideMenu();
         });
 
+    const chatsList = () => {
+        const chatIcons = [ ChatGPTIcon ];
+
+        const showFirstMessage = ( key ) => {
+            if( !chatsMessages[ key ] || ( chatsMessages[ key ].length === 0 )) {
+                return ( <>В чате сообщений нет...</> )
+            }
+
+            let firstMessage = chatsMessages[ key ].content.slice( 0, 20 );
+            firstMessage += '...';
+
+            return ( <>{ firstMessage }</> )
+        }
+
+        const items = chatsModels.map(( element, key ) => {
+            return (
+                <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) } key={ key }>
+                    <View style={ styles.sideMenuItemHeader } >
+                        <Image style={ styles.messageIconImage } source = { chatIcons[ element ] } />
+                        <Text style={ styles.chatNameText }>
+                            { chatsSettings[ element ].chatName }
+                        </Text>
+                    </View>
+                    <Text style={ styles.firstMessageText }>
+                        { showFirstMessage( key ) }
+                    </Text>
+                </Pressable>
+            )
+        })
+
+        return (
+            <View style={ styles.sideMenuItems }>
+                { items }
+            </View>
+        )
+
+    }
+    
+
     return (
         <GestureDetector gesture={ flingLeftGesture }>
             <Animated.View style={{ ...styles.sideMenuContainer, transform: [{ translateX: animSideMenu }] }}>
@@ -85,34 +131,9 @@ const SideMenu = ( props, ref ) => {
                         }} 
                         style={ styles.closeMenuCross }
                     >
-                        <Ionicons name="close-outline" size={ 40 } color= { "black" } />
+                        <Ionicons name="close-outline" size={ 40 } color= { THEME.SIDE_MENU_ITEMS_TEXT_COLOR } />
                     </Pressable>
-                    <View style={ styles.sideMenuItems }>
-                        <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) }>
-                            <Ionicons name="home-outline" size={ 28 } color= { "black" } />
-                            <Text style={ styles.sideMenuItemText }>
-                                Новая игра
-                            </Text>
-                        </Pressable>
-                        <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) }>
-                            <Ionicons name="settings-outline" size={ 28 } color= { "black" } />
-                            <Text style={ styles.sideMenuItemText }>
-                                Настройки
-                            </Text>
-                        </Pressable>
-                        <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) }>
-                            <Ionicons name="school-outline" size={ 28 } color= { "black" } />
-                            <Text style={ styles.sideMenuItemText }>
-                                Как играть?
-                            </Text>
-                        </Pressable>
-                        <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) }>
-                            <Ionicons name="help-circle-outline" size={ 28 } color= { "black" } />
-                            <Text style={ styles.sideMenuItemText }>
-                                Об игре
-                            </Text>
-                        </Pressable>
-                    </View>
+                    { chatsList() }
                 </View>
                 <Pressable onPress={ hideSideMenu }>
                     <Animated.View style={{ ...styles.sideMenuOverlay, opacity: animOverlayOpacity }}>
@@ -139,25 +160,39 @@ const styles = StyleSheet.create({
         paddingTop: THEME.STATUSBAR_HEIGHT,
     },
     closeMenuCross: {
-        alignItems: 'flex-end',
-        marginRight: 5,
-        marginTop: 5 
+        alignItems: 'flex-end'
     },
     sideMenuItems: {
-        marginTop: 15,
+        marginTop: hp('2%')
     },
     sideMenuItem: {
-        paddingTop: 15,
-        paddingLeft: 15,
-        paddingBottom: 15,
-        flexDirection: 'row',
-        alignItems: 'center'
+        marginRight: wp('1%'),
+        marginLeft: wp('1%'),
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
+        borderColor: THEME.SIDE_MENU_ITEM_BORDER_COLOR
     },
-    sideMenuItemText: {
-        color: THEME.SIDE_MENU_ITEMS_TEXT_COLOR,
+    sideMenuItemHeader: {
+        paddingTop: hp('1%'),
+        paddingLeft: wp('2%'),
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    messageIconImage: {
+        width: wp('7%'),
+        height: wp('7%')
+    },
+    chatNameText: {
+        color: THEME.MESSAGE_NAME_COLOR,
         fontFamily: THEME.FONT_SEMIBOLD,
         fontSize: THEME.FONT28,
-        marginLeft: 10
+        marginLeft: wp('2%')
+    },
+    firstMessageText: {
+        color: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR,
+        fontSize: THEME.FONT22,
+        paddingLeft: wp('11.1%'),
+        paddingBottom: hp('1%')
     },
     sideMenuOverlay: {
         height: THEME.SCREEN_HEIGHT * 2,
