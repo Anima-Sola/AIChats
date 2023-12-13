@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
 import { APIs } from '../APIs/APIs';
 import InputField from '../components/InputField';
-import { getChatsMessages, getChatsSettings, getCurrentChat } from '../store/selectors';
+import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
 import { sendMessageToChatAction, clearChatAction } from '../store/actions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Chat from '../components/Chat';
@@ -17,10 +17,11 @@ const MainChatScreen = () => {
     const [ isReplyArrived, setIsReplyArrived ] = useState( true );
     const childRef = useRef();
     const currentChat = useSelector( getCurrentChat );
-    const { api, reqMessageTemplate, resMessageTemplate } = useSelector( getChatsSettings )[ currentChat ];
+    const chatModel = useSelector( getChatsModels )[ currentChat ];
+    const { api } = useSelector( getChatsSettings )[ chatModel ];
     const chatMessages = useSelector( getChatsMessages )[ currentChat ];
     const dispatch = useDispatch();
-    const [ , forceUpdate ] = useReducer(x => x + 1, 0);
+    const [, forceUpdate ] = useReducer(x => x + 1, 0);
 
     //Detect slide to the right to show side menu
     const flingRightGesture = Gesture.Fling()
@@ -38,26 +39,24 @@ const MainChatScreen = () => {
         return () => backHandler.remove();
     })
 
-    const sendMessageToChat = async ( message ) => {
-        if( message === '' ) return;
+    const sendMessageToChat = async ( userMessage ) => {
+        if( userMessage === '' ) return;
 
         setIsReplyArrived( false );
-    
-        const userMessage = { ...reqMessageTemplate, 'content': message };
+
         dispatch(sendMessageToChatAction( userMessage ));
         forceUpdate();
-
-        //const response = await APIs[ api ].chat( chatMessages );
-        const response = 'Столицей Франции является город Париж';
-        const robotMessage = { ...resMessageTemplate, 'content': response };
+        
+        const assistantMessage = await APIs[ api ].chat( chatMessages );
+        /*const assistantMessage = 'Столицей Франции является город Париж';
         setTimeout(() => {
             setIsReplyArrived( true );
-            dispatch(sendMessageToChatAction( robotMessage ));
+            dispatch(sendMessageToChatAction( assistantMessage ));
             forceUpdate();
-        }, 1000);
-        /*setIsReplyArrived( true );
-        dispatch(sendMessageToChatAction( robotMessage ));
-        forceUpdate(); */
+        }, 1000);*/
+        setIsReplyArrived( true );
+        dispatch(sendMessageToChatAction( assistantMessage ));
+        forceUpdate();
     }
 
     const clearChat = () => {

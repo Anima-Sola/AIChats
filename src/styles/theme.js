@@ -36,6 +36,8 @@ const THEME = {
     FONT40: hp('4%') / fontScale,
     FONT45: hp('4.5%') / fontScale,
     FONT50: hp('5%') / fontScale,
+    FONT_LIGHT: '200',
+    FONT_SEMIBOLD: '500',
     SIDE_MENU_PRESSABLE_STYLE: ( itemStyles ) => {
         return (({ pressed }) => 
             [

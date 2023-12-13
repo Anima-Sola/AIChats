@@ -8,6 +8,8 @@ import THEME from '../styles/theme';
 
 import HumanIcon from '../assets/ChatIcons/HumanIcon.png';
 import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
+import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
+import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const Chat = ({ isReplyArrived }) => {
     const currentChat = useSelector( getCurrentChat );
@@ -29,7 +31,7 @@ const Chat = ({ isReplyArrived }) => {
 
     const displayMessages = () => {
         let messageBackGroundColor, messageNameColor, messageIcon, messageName;
-        const chatIcons = [ ChatGPTIcon ];
+        const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
 
         const items = chatsMessages.map(( element, key ) => {
             
@@ -52,7 +54,7 @@ const Chat = ({ isReplyArrived }) => {
                     </View>
                     <View style={ styles.messageTextContainer } >
                         <Text style={{ ...styles.messageNameContainer, color: messageNameColor }}>{ messageName }</Text>
-                        <Text style={ styles.messageText } selectable={true}>{ element['content'] }</Text>
+                        <Text style={ styles.messageText } selectable={true}>{ element }</Text>
                     </View>
                 </View>
             )

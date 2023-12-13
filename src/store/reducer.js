@@ -7,14 +7,16 @@ const initialState = {
             iconNum: 0,
             chatName: 'CHATGPT',
             api: 'chatGpt35API',
-            reqMessageTemplate: {
-                'role': 'user',
-                'content': ''
-            },
-            resMessageTemplate: {
-                'role': 'assistant',
-                'content': ''
-            }
+        },
+        {
+            iconNum: 1,
+            chatName: 'GIGACHAT',
+            api: 'gigaChatAPI',
+        },
+        {
+            iconNum: 2,
+            chatName: 'YANDEXGPT',
+            api: 'yandexGTPAPI',
         }
     ],
     currentChat: 0,

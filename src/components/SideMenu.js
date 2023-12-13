@@ -4,12 +4,15 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, StyleSheet, Animated, Pressable, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button } from '@rneui/themed';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons';
 import { getChatsModels, getChatsMessages, getChatsSettings, getCurrentChat } from '../store/selectors';
 import THEME from '../styles/theme';
 
 import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
+import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
+import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const SideMenu = ( props, ref ) => {
     const currentChat = useSelector( getCurrentChat );
@@ -83,14 +86,14 @@ const SideMenu = ( props, ref ) => {
         });
 
     const chatsList = () => {
-        const chatIcons = [ ChatGPTIcon ];
+        const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
 
         const showFirstMessage = ( key ) => {
             if( !chatsMessages[ key ] || ( chatsMessages[ key ].length === 0 )) {
                 return ( <>В чате сообщений нет...</> )
             }
 
-            let firstMessage = chatsMessages[ key ].content.slice( 0, 20 );
+            let firstMessage = chatsMessages[ key ].slice( 0, 20 );
             firstMessage += '...';
 
             return ( <>{ firstMessage }</> )
@@ -115,6 +118,12 @@ const SideMenu = ( props, ref ) => {
         return (
             <View style={ styles.sideMenuItems }>
                 { items }
+                <Button 
+                    buttonStyle={ styles.addNewChatButton } 
+                    titleStyle={ styles.addNewChatButtonTitle }
+                    type="outline" 
+                    title="+ Новый чат"
+                />
             </View>
         )
 
@@ -145,6 +154,17 @@ const SideMenu = ( props, ref ) => {
 }
 
 const styles = StyleSheet.create({
+    addNewChatButton: {
+        margin: wp('2%'),
+        width: THEME.SCREEN_WIDTH * 0.7 - wp('4%'),
+        borderRadius: wp('3%'),
+        borderColor: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR
+    },
+    addNewChatButtonTitle: {
+        color: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR,
+        fontWeight: THEME.FONT_SEMIBOLD,
+        fontSize: THEME.FONT22,
+    },
     sideMenuContainer: {
         flex: 1,
         flexDirection: 'row',
@@ -168,9 +188,8 @@ const styles = StyleSheet.create({
     sideMenuItem: {
         marginRight: wp('1%'),
         marginLeft: wp('1%'),
-        borderBottomWidth: 1,
-        borderTopWidth: 1,
-        borderColor: THEME.SIDE_MENU_ITEM_BORDER_COLOR
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        borderRadius: wp('3%'),
     },
     sideMenuItemHeader: {
         paddingTop: hp('1%'),
@@ -184,13 +203,14 @@ const styles = StyleSheet.create({
     },
     chatNameText: {
         color: THEME.MESSAGE_NAME_COLOR,
-        fontFamily: THEME.FONT_SEMIBOLD,
+        fontWeight: THEME.FONT_SEMIBOLD,
         fontSize: THEME.FONT28,
         marginLeft: wp('2%')
     },
     firstMessageText: {
         color: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR,
         fontSize: THEME.FONT22,
+        fontWeight: THEME.FONT_LIGHT,
         paddingLeft: wp('11.1%'),
         paddingBottom: hp('1%')
     },
