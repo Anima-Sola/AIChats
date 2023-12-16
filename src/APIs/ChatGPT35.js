@@ -19,24 +19,26 @@ class CHAT_GPT_3_5 {
     }
 
     async chat( messages ) {
-        const arrMessages = this.makeArrObjMessages( messages );
-        try {
-            const response = await axios.post( this.API_URL, 
-                {
-                    model: this.model,
-                    messages: arrMessages,
-                }, 
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + this.API_KEY,
-                    },
-                });
-            return completions = response?.data?.choices?.[0]?.message?.content;
-        } catch( error ) {
-            console.error('Error:', error);
-            return "Нет связи с чат-ботом :(";
-        }
+        const ArrOfObjMessages = this.makeArrObjMessages( messages );
+
+        const response = axios.post( this.API_URL, 
+            {
+                model: this.model,
+                messages: ArrOfObjMessages,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + this.API_KEY,
+                },
+                timeout: 3000
+            }).then( function( response ) {
+                return completions = response?.data?.choices?.[0]?.message?.content;
+            }).catch( function( error ){
+                return "Нет связи с чат-ботом:(";
+            })
+
+        return response;
     }
 
 }

@@ -11,9 +11,30 @@ class GIGA_CHAT {
         this.tokenExpirationData = 0;
         this.accessToken = "";
 
-        this.model = "GigaChat:latest";
-        this.API_URL = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions";
-        
+        this.model = "GigaChat-Pro";
+        this.API_URL = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions";  
+    }
+
+    async getAccessToken() {
+        const response = axios.post( this.TOKEN_ACCESS_URL, 
+            {
+                scope: this.SCOPE
+            }, 
+            {
+                headers: {
+                    "Authorization": `Bearer ${ this.CLIENT_AUTH_DATA }`,
+                    "RqUID": this.CLIENT_ID,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                timeout: 3000,
+            }).then( function( response ) {
+                return response;
+            }).catch( function( error ){
+                console.log(error.toJSON());
+                return "Нет связи с чат-ботом :(";
+            })
+
+        return response;
     }
 
     makeArrOfObjMessages = ( messages ) => {
@@ -25,66 +46,28 @@ class GIGA_CHAT {
     }
 
     async chat( messages ) {
+        const arrMessages = this.makeArrOfObjMessages( messages );
         
-        /*let url = 'https://ya.ru/search/?text=fetch+javascript&lr=12&search_source=yaru_desktop_common&search_domain=yaru&src=suggest_Pers';
-        let response = await fetch(url);
-        console.log(response.json());
-
-        return "Ответ";*/
-           
-        fetch("https://ngw.devices.sberbank.ru:9443/api/v2/oauth", 
+        const response = axios.post( this.API_URL, 
             {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer ",
-                "RqUID": ''
-            },
-            body: "scope=GIGACHAT_API_PERS"
-        })
-        .then( response => response.json() )
-        .then( result => {
-            console.log( result.expires_at, result.access_token );
-            return result?.expires_at;
-        });
+                model: this.model,
+                messages: arrMessages
+            }, 
+            {
+                headers: {
+                    "Authorization": `Bearer `,
+                    "Content-Type": "application/json",
+                },
+                timeout: 3000
+            }).then( function( response ) {
+                console.log(response);
+                return response;
+            }).catch( function( error ){
+                console.log(error.toJSON());
+                return "Нет связи с чат-ботом :(";
+            })
 
-        return "Ответ";
-
-        /*axios({
-            url: "https://ngw.devices.sberbank.ru:9443/api/v2/oauth",
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer ",
-                "RqUID": ''
-            },
-            data: {
-                scope: "GIGACHAT_API_PERS"
-            }
-        }).then(( response ) => {
-            console.log( response )
-        }).catch(function (error) {
-            console.log(error.toJSON());
-            return "Нет связи с чат-ботом :(";
-        });*/   
-       // const ArrOfObjMessages = this.makeArrOfObjMessages( messages );
-        /*try {
-            const response = await axios.post( this.TOKEN_ACCESS_URL, 
-                {
-                    scope: this.SCOPE
-                }, 
-                {
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Authorization": `Bearer ${ this.CLIENT_AUTH_DATA }`,
-                        "RqUID": this.CLIENT_ID
-                    }
-                });
-            return response;
-        } catch( error ) {
-            console.error('Error:', error.toJSON());
-            return "Нет связи с чат-ботом :(";
-        }*/
+        return response;
     }
 }
 

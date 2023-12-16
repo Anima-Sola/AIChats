@@ -27,7 +27,7 @@ class YANDEX_GPT {
                 completionOptions: {
                     stream: false,
                     temperature: 0.6,
-                    maxTokens: 2000
+                    maxTokens: 3000
                 },
                 messages: ArrOfObjMessages,
             }, 
@@ -35,7 +35,8 @@ class YANDEX_GPT {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Api-Key ${ this.API_KEY }`,
-                }
+                },
+                timeout: 2000
             }).then( function( response ) {
                 return response.data.result.alternatives[ 0 ].message.text;
             }).catch( function( error ){
