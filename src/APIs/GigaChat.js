@@ -8,11 +8,13 @@ class GIGA_CHAT {
         this.CLIENT_SECRET = config[ "gigachat-client-secret" ];
         this.CLIENT_AUTH_DATA = config[ "gigachat-client-auth-data" ];
         this.SCOPE = config[ "gigachat-scope" ];
+        this.ACCESS_TOKEN = config[ "gigachat-access-token" ];
         this.tokenExpirationData = 0;
         this.accessToken = "";
 
         this.model = "GigaChat-Pro";
         this.API_URL = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions";  
+        //https://cors-anywhere.herokuapp.com/
     }
 
     async getAccessToken() {
@@ -22,17 +24,18 @@ class GIGA_CHAT {
             }, 
             {
                 headers: {
-                    "Authorization": `Bearer ${ this.CLIENT_AUTH_DATA }`,
+                    "Authorization": `Basic ${ this.CLIENT_AUTH_DATA }`,
                     "RqUID": this.CLIENT_ID,
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
                 timeout: 3000,
             }).then( function( response ) {
-                return response;
+                console.log(response);
+                return "Есть ответ!!!"
             }).catch( function( error ){
                 console.log(error.toJSON());
                 return "Нет связи с чат-ботом :(";
-            })
+            });
 
         return response;
     }
@@ -46,6 +49,9 @@ class GIGA_CHAT {
     }
 
     async chat( messages ) {
+        /*const response = await this.getAccessToken();
+        return response;*/
+
         const arrMessages = this.makeArrOfObjMessages( messages );
         
         const response = axios.post( this.API_URL, 
@@ -55,13 +61,13 @@ class GIGA_CHAT {
             }, 
             {
                 headers: {
-                    "Authorization": `Bearer `,
+                    "Authorization": `Bearer ${ this.ACCESS_TOKEN }`,
                     "Content-Type": "application/json",
                 },
                 timeout: 3000
             }).then( function( response ) {
                 console.log(response);
-                return response;
+                return "Есть ответ!!!"
             }).catch( function( error ){
                 console.log(error.toJSON());
                 return "Нет связи с чат-ботом :(";
