@@ -4,6 +4,7 @@ import config from "../config/default.json";
 class GIGA_CHAT {
     constructor() {
         this.TOKEN_ACCESS_URL = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth";
+        //this.TOKEN_ACCESS_URL = "https://webhook.site/2fdbc381-874f-4866-aae3-a01841327fdd";
         this.CLIENT_ID = config[ "gigachat-client-id" ];
         this.CLIENT_SECRET = config[ "gigachat-client-secret" ];
         this.CLIENT_AUTH_DATA = config[ "gigachat-client-auth-data" ];
@@ -49,8 +50,33 @@ class GIGA_CHAT {
     }
 
     async chat( messages ) {
+
+        const  xhr = new XMLHttpRequest();
+        xhr.open('POST', this.TOKEN_ACCESS_URL, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("RqUID", this.CLIENT_ID);
+        xhr.setRequestHeader("Authorization", `Basic ${ this.CLIENT_AUTH_DATA }`);
+
+        xhr.send(`scope=${this.SCOPE}`);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState != 4) return;
+
+            console.log(xhr.error);
+            console.log(xhr.statusText, xhr.responseText, xhr.status);
+          
+            /*if (xhr.status != 200) {
+              console.log(xhr.status + ': ' + xhr.statusText);
+            } else {
+              console.log(xhr.responseText);
+            }*/
+          
+        }
+
+        return "Нет связи с чат-ботом :(";
+
         /*const response = await this.getAccessToken();
-        return response;*/
+        return response;
 
         const arrMessages = this.makeArrOfObjMessages( messages );
         
@@ -73,7 +99,7 @@ class GIGA_CHAT {
                 return "Нет связи с чат-ботом :(";
             })
 
-        return response;
+        return response;*/
     }
 }
 
