@@ -1,5 +1,6 @@
 node_modules/
 src/config
+src/main/assets
 .expo/
 dist/
 npm-debug.*
