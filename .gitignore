@@ -1,6 +1,8 @@
 node_modules/
 src/config
 src/main/assets
+src/ReqRetranslator/node_modules
+src/ReqRetranslator/certs
 .expo/
 dist/
 npm-debug.*
