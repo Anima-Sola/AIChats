@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
-import { View, StyleSheet, StatusBar, TextInput, BackHandler } from 'react-native';
+import { View, StyleSheet, StatusBar, Text, BackHandler } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
+import { Button } from '@rneui/themed';
 import { APIs } from '../APIs/APIs';
 import InputField from '../components/InputField';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
@@ -65,13 +66,32 @@ const MainChatScreen = () => {
         forceUpdate();
     }
 
+    const showAddChatModal = () => {
+        console.log('Add');
+    }
+
     return (
         <GestureDetector gesture={ flingRightGesture }>
             <View style={ styles.container } >
                 <StatusBar translucent backgroundColor="transparent" />
                 <View style={ styles.header }>
-                    <Icon style={ styles.icon } name={ 'menu' } color={ THEME.TEXT_COLOR } size={ 35 } onPress={() => { childRef.current.showSideMenu() }}/>
-                    <Icon style={ styles.icon } name={ 'settings-outline' } color={ THEME.TEXT_COLOR  } size={ 35 }/>
+                    <View style={ styles.header_left_side } >
+                        <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 35 } onPress={() => { childRef.current.showSideMenu() }}/>
+                    </View>
+                    <View style={ styles.header_right_side }>
+                        <Icon.Button 
+                            name='chatbubbles-outline' 
+                            size={ 22 } 
+                            borderRadius={ 20 } 
+                            backgroundColor={ THEME.OWN_MESSAGE_NAME_COLOR }
+                            onPress={ () => showAddChatModal() }
+                        >
+                            <Text style={ styles.add_chat_button_text_style }>
+                                Add Chat
+                            </Text>
+                        </Icon.Button>
+                        <Icon style={ styles.settings_icon } name={ 'settings-outline' } color={ THEME.TEXT_COLOR  } size={ 35 }/>
+                    </View>
                 </View>
                 <Chat isReplyArrived={ isReplyArrived }/>
                 <InputField clearChat={ clearChat } sendMessageToChat={ sendMessageToChat } isReplyArrived={ isReplyArrived } />
@@ -95,9 +115,33 @@ const styles = StyleSheet.create({
         paddingRight: wp('4%'),
         height: hp('13%'),
     },
-    icon: {
-        alignSelf: 'center'
+    header_left_side: {
+        justifyContent: 'center'
+    },
+    header_right_side: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: wp('50%'),
+    },
+    add_chat_button_text_style: {
+        color: THEME.ICON_COLOR,
+        fontSize: THEME.FONT30,
+        marginLeft: wp('-1%'),
+        marginRight: wp('0.5%')
+    },
+    settings_icon: {
+        marginLeft: wp('2%')
     }
 })
 
 export default MainChatScreen;
+
+
+                            /*<Button 
+                                type="outline"
+                                buttonStyle={ styles.add_chat_button_style }
+                                titleStyle={ styles.add_chat_title_style }
+                            >
+                                ADD
+                            </Button>*/

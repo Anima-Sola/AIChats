@@ -118,12 +118,6 @@ const SideMenu = ( props, ref ) => {
         return (
             <View style={ styles.sideMenuItems }>
                 { items }
-                <Button 
-                    buttonStyle={ styles.addNewChatButton } 
-                    titleStyle={ styles.addNewChatButtonTitle }
-                    type="outline" 
-                    title="+ Новый чат"
-                />
             </View>
         )
 
@@ -154,17 +148,6 @@ const SideMenu = ( props, ref ) => {
 }
 
 const styles = StyleSheet.create({
-    addNewChatButton: {
-        margin: wp('2%'),
-        width: THEME.SCREEN_WIDTH * 0.7 - wp('4%'),
-        borderRadius: wp('3%'),
-        borderColor: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR
-    },
-    addNewChatButtonTitle: {
-        color: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR,
-        fontWeight: THEME.FONT_SEMIBOLD,
-        fontSize: THEME.FONT22,
-    },
     sideMenuContainer: {
         flex: 1,
         flexDirection: 'row',
