@@ -5,18 +5,21 @@ const initialState = {
     chatsSettings: [
         {
             iconNum: 0,
-            chatName: 'CHATGPT',
+            chatName: 'ChatGPT 3.5',
             api: 'chatGpt35API',
+            isDisabled: false
         },
         {
             iconNum: 1,
-            chatName: 'GIGACHAT',
+            chatName: 'GigaChat',
             api: 'gigaChatAPI',
+            isDisabled: false
         },
         {
             iconNum: 2,
-            chatName: 'YANDEXGPT',
+            chatName: 'YandexGPT',
             api: 'yandexGTPAPI',
+            isDisabled: false
         }
     ],
     currentChat: 0,

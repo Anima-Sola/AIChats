@@ -1,9 +1,37 @@
 import React from "react";
-import { View, Modal, StyleSheet, Pressable } from 'react-native';
+import { View, Modal, StyleSheet, Pressable, Image, Text } from 'react-native';
+import { useSelector } from "react-redux";
+import { Button } from "@rneui/themed";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import THEME from "../styles/theme";
+import { getChatsSettings } from "../store/selectors";
+
+import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
+import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
+import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const AddNewChatModal = ({ isVisible, setIsVisible }) => {
+    const chatsSettings = useSelector( getChatsSettings );
+
+    const displayModelList = () => {
+        const chatsIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
+
+        const items = chatsSettings.map(( element, key ) => {
+            return (
+                <>
+                    <Pressable style={ THEME.ADD_NEW_CHAT_MODAL_ITEM_PRESSABLE_STYLE( styles.item ) } key={ key }>
+                        <Image style={ styles.itemIconImage } source = { chatsIcons[ key ]} />
+                        <Text style={ styles.itemIconText }> { element.chatName } </Text>
+                    </Pressable>
+                </>
+            )
+        })
+
+        return (
+            <>{ items }</>
+        )
+    }
+
     return(
         <Modal
             visible={ isVisible }
@@ -18,7 +46,14 @@ const AddNewChatModal = ({ isVisible, setIsVisible }) => {
             />
             <View style={ styles.container }>
                 <View style={ styles.window }>
-
+                    { displayModelList() }
+                    <Button
+                        title={ 'Закрыть' }
+                        containerStyle={ styles.closeButtonContainerStyle }
+                        onPress={ () => setIsVisible( false ) }
+                        color={ THEME.OWN_MESSAGE_NAME_COLOR }
+                        titleStyle={ styles.closeButtonTitleStyle }
+                    />  
                 </View>
             </View>
         </Modal>
@@ -48,13 +83,42 @@ const styles = StyleSheet.create({
     },
     window: {
         backgroundColor: THEME.ADD_NEW_CHAT_MODAL_BACKGROUND_COLOR,
-        borderRadius: 5,
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingBottom: 5,
+        borderRadius: 10,
+        paddingTop: 10,
+        paddingBottom: 15,
         width: wp('80%'),
-        height: hp('85%'),
     },
+    item: {
+        flexDirection: 'row',
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        paddingRight: 15
+    },
+    itemIconImage: {
+        width: wp('12%'),
+        height: wp('12%')
+    },
+    separator: {
+        borderColor: '#000',
+        borderWidth: 1
+    },
+    itemIconText: {
+        paddingLeft: 10,
+        alignSelf: 'center',
+        fontSize: THEME.FONT35,
+    },
+    closeButtonContainerStyle: {
+        width: '90%',
+        marginLeft: '5%',
+        marginTop: 15,
+        backgroundColor: THEME.OWN_MESSAGE_NAME_COLOR,
+        borderRadius: 5
+    },
+    closeButtonTitleStyle: {
+        color: THEME.TEXT_COLOR,
+        fontSize: THEME.FONT25
+    }
 })
 
 

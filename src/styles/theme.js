@@ -43,7 +43,18 @@ const THEME = {
         return (({ pressed }) => 
             [
                 { 
-                    backgroundColor: pressed ? '#4d3e3e': THEME.SIDE_MENU_BACKGROUND_COLOR 
+                    backgroundColor: pressed ? '#4d3e3e': THEME.SIDE_MENU_BACKGROUND_COLOR,
+                },
+                itemStyles
+            ]
+        )
+    },
+    ADD_NEW_CHAT_MODAL_ITEM_PRESSABLE_STYLE: ( itemStyles ) => {
+        return (({ pressed }) => 
+            [
+                { 
+                    backgroundColor: pressed ? THEME.OWN_MESSAGE_NAME_COLOR: THEME.ADD_NEW_CHAT_MODAL_BACKGROUND_COLOR,
+                    color: THEME.TEXT_COLOR
                 },
                 itemStyles
             ]
