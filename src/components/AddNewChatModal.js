@@ -1,16 +1,18 @@
 import React from "react";
 import { View, Modal, StyleSheet, Pressable, Image, Text } from 'react-native';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@rneui/themed";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import THEME from "../styles/theme";
 import { getChatsSettings } from "../store/selectors";
+import { addNewChatAction } from "../store/actions";
 
 import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
 import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
 import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const AddNewChatModal = ({ isVisible, setIsVisible }) => {
+    const dispatch = useDispatch();
     const chatsSettings = useSelector( getChatsSettings );
 
     const displayModelList = () => {
@@ -18,12 +20,17 @@ const AddNewChatModal = ({ isVisible, setIsVisible }) => {
 
         const items = chatsSettings.map(( element, key ) => {
             return (
-                <>
-                    <Pressable style={ THEME.ADD_NEW_CHAT_MODAL_ITEM_PRESSABLE_STYLE( styles.item ) } key={ key }>
-                        <Image style={ styles.itemIconImage } source = { chatsIcons[ key ]} />
-                        <Text style={ styles.itemIconText }> { element.chatName } </Text>
-                    </Pressable>
-                </>
+                <Pressable 
+                    style={ THEME.ADD_NEW_CHAT_MODAL_ITEM_PRESSABLE_STYLE( styles.item ) } 
+                    key={ key }
+                    onPress={ () => {
+                        dispatch( addNewChatAction( key ) );
+                        setIsVisible( false );
+                    }}
+                >
+                    <Image style={ styles.itemIconImage } source = { chatsIcons[ key ]} />
+                    <Text style={ styles.itemIconText }> { element.chatName } </Text>
+                </Pressable>
             )
         })
 

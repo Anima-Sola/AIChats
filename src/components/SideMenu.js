@@ -4,10 +4,11 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, StyleSheet, Animated, Pressable, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@rneui/themed';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons';
 import { getChatsModels, getChatsMessages, getChatsSettings, getCurrentChat } from '../store/selectors';
+import { deleteChatAction } from '../store/actions';
 import THEME from '../styles/theme';
 
 import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
@@ -15,6 +16,7 @@ import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
 import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const SideMenu = ( props, ref ) => {
+    const dispatch = useDispatch();
     const currentChat = useSelector( getCurrentChat );
     const chatsModels = useSelector( getChatsModels );
     const chatsMessages = useSelector( getChatsMessages )[ currentChat ];
@@ -90,7 +92,7 @@ const SideMenu = ( props, ref ) => {
 
         const showFirstMessage = ( key ) => {
             if( !chatsMessages[ key ] || ( chatsMessages[ key ].length === 0 )) {
-                return ( <>В чате сообщений нет...</> )
+                return ( <>Cообщений нет...</> )
             }
 
             let firstMessage = chatsMessages[ key ].slice( 0, 20 );
@@ -102,15 +104,25 @@ const SideMenu = ( props, ref ) => {
         const items = chatsModels.map(( element, key ) => {
             return (
                 <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) } key={ key }>
-                    <View style={ styles.sideMenuItemHeader } >
-                        <Image style={ styles.messageIconImage } source = { chatIcons[ element ] } />
-                        <Text style={ styles.chatNameText }>
-                            { chatsSettings[ element ].chatName }
+                    <View>
+                        <View style={ styles.sideMenuItemHeader } >
+                            <Image style={ styles.messageIconImage } source = { chatIcons[ element ] } />
+                            <Text style={ styles.chatNameText }>
+                                { chatsSettings[ element ].chatName }
+                            </Text>
+                        </View>
+                        <Text style={ styles.firstMessageText }>
+                            { showFirstMessage( key ) }
                         </Text>
+                    </View>    
+                    <View style={ styles.trashIconContainer }>
+                        <Icon 
+                            name={ 'trash-outline' } 
+                            color={ THEME.TEXT_COLOR } 
+                            size={ 35 } 
+                            onPress={ () => dispatch( deleteChatAction( key ) ) }
+                        />
                     </View>
-                    <Text style={ styles.firstMessageText }>
-                        { showFirstMessage( key ) }
-                    </Text>
                 </Pressable>
             )
         })
@@ -166,13 +178,15 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end'
     },
     sideMenuItems: {
-        marginTop: hp('2%')
+        marginTop: hp('2%'),
     },
     sideMenuItem: {
         marginRight: wp('1%'),
         marginLeft: wp('1%'),
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         borderRadius: wp('3%'),
+        marginBottom: 5,
+        flexDirection: 'row'
     },
     sideMenuItemHeader: {
         paddingTop: hp('1%'),
@@ -196,6 +210,10 @@ const styles = StyleSheet.create({
         fontWeight: THEME.FONT_LIGHT,
         paddingLeft: wp('11.1%'),
         paddingBottom: hp('1%')
+    },
+    trashIconContainer: {
+        alignSelf: 'center',
+        marginLeft: 5
     },
     sideMenuOverlay: {
         height: THEME.SCREEN_HEIGHT * 2,

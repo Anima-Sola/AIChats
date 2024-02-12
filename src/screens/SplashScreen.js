@@ -27,7 +27,7 @@ const AppSplashScreen =({ navigation }) => {
 
     const onLayoutRootView = useCallback(async () => {
         if( appIsReady ) {
-            if( store.getState().chatsMessages.length === 0 ) dispatch( addNewChatAction( 0 ) );
+            //if( store.getState().chatsMessages.length === 0 ) dispatch( addNewChatAction( 0 ) );
             navigation.navigate('MainChatScreen');
             await SplashScreen.hideAsync();
         }

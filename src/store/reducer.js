@@ -54,6 +54,15 @@ const clearChat = ( state ) => {
     return saveState( newState );
 }
 
+const deleteChat = ( state, chatIndex ) => {
+    const newState = { ...state };
+
+    newState.chatsMessages.splice( chatIndex, 1 );
+    newState.chatsModels.splice( chatIndex, 1 );
+
+    return saveState( newState );
+}
+
 const reducer = ( state = initialState, action ) => {
     switch( action.type ) {
         case 'LOAD_APP_DATA':
@@ -67,6 +76,8 @@ const reducer = ( state = initialState, action ) => {
             return addMessageToChat( state, action.payload );
         case 'CLEAR_CHAT':
             return clearChat( state );
+        case 'DELETE_CHAT':
+            return deleteChat( state, action.payload );
         default:
             return state;
     }

@@ -13,10 +13,40 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Chat from '../components/Chat';
 import SideMenu from '../components/SideMenu';
 import THEME from '../styles/theme';
+import { isNoChats } from '../components/CommonFuncs';
 
-const MainChatScreen = () => {
+const NoChats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
+    return (
+        <View style={ styles.container } >
+            <StatusBar translucent backgroundColor="transparent" />
+            <AddNewChatModal isVisible={ isNewChatModalVisible } setIsVisible={ setIsNewChatModalVisible } />
+            <View style={ styles.header }>
+                <View style={{ ...styles.header_left_side, opacity: 0.3 }} >
+                    <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 40 } disabled={ true }/>
+                </View>
+                <View style={ styles.header_right_side }>
+                    <Icon.Button 
+                        name='chatbubbles-outline' 
+                        size={ 25 } 
+                        borderRadius={ 20 } 
+                        backgroundColor={ THEME.OWN_MESSAGE_NAME_COLOR }
+                        onPress={ () => setIsNewChatModalVisible( true ) }
+                    >
+                        <Text style={ styles.add_chat_button_text_style }>
+                            Add Chat
+                        </Text>
+                    </Icon.Button>
+                    <Icon style={ styles.settings_icon } name={ 'menu' } color={ THEME.TEXT_COLOR  } size={ 40 }/>
+                </View>
+            </View>
+            <Chat isReplyArrived={ true }/>
+            <InputField clearChat={ () => {} } sendMessageToChat={ () => {} } isReplyArrived={ false } />
+        </View>
+    )
+}
+
+const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
     const [ isReplyArrived, setIsReplyArrived ] = useState( true );
-    const [ isNewChatModalVisible, setIsNewChatModalVisible ] = useState( false );
     const childRef = useRef();
     const currentChat = useSelector( getCurrentChat );
     const chatModel = useSelector( getChatsModels )[ currentChat ];
@@ -99,6 +129,17 @@ const MainChatScreen = () => {
     )
 }
 
+const MainChatScreen = () => {
+    const [ isNewChatModalVisible, setIsNewChatModalVisible ] = useState( false );
+
+    if( !isNoChats() ) {
+        return <NoChats isNewChatModalVisible={ isNewChatModalVisible } setIsNewChatModalVisible={ setIsNewChatModalVisible } />
+    }
+
+    return <Chats isNewChatModalVisible={ isNewChatModalVisible } setIsNewChatModalVisible={ setIsNewChatModalVisible } />
+    
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -145,3 +186,4 @@ export default MainChatScreen;
                             >
                                 ADD
                             </Button>*/
+                            /*<AddNewChatModal isVisible={ isNewChatModalVisible } setIsVisible={ setIsNewChatModalVisible } />*/

@@ -29,3 +29,10 @@ export const clearChatAction = () => {
         type: 'CLEAR_CHAT',
     }
 }
+
+export const deleteChatAction = ( chatIndex ) => {
+    return {
+        type: 'DELETE_CHAT',
+        payload: chatIndex
+    }
+}

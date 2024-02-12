@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
 import THEME from '../styles/theme';
+import { isNoChats } from './CommonFuncs'; 
 
 import HumanIcon from '../assets/ChatIcons/HumanIcon.png';
 import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
@@ -12,13 +13,27 @@ import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
 import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const Chat = ({ isReplyArrived }) => {
+
+    console.log('render');
+
+    if( !isNoChats() ) {
+        return (
+            <View style={{ ...styles.container, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={ styles.noMessagesText }>
+                    Нажмите кнопку
+                </Text>
+                <Text style={ styles.noMessagesTextAddChat }>
+                    "Add Chat"
+                </Text>
+            </View>
+        )
+    }
+
     const currentChat = useSelector( getCurrentChat );
     const currentChatModel = useSelector( getChatsModels )[ currentChat ];
     const chatsMessages = useSelector( getChatsMessages )[ currentChat ];
     const chatsSettings = useSelector( getChatsSettings )[ currentChatModel ];
     
-    console.log('render');
-
     if( !chatsMessages?.length ) {
         return (
             <View style={{ ...styles.container, alignItems: 'center', justifyContent: 'center' }}>
@@ -99,6 +114,11 @@ const styles = StyleSheet.create({
     },
     noMessagesText: {
         color: THEME.TEXT_COLOR,
+        fontSize: THEME.FONT35,
+        fontStyle: 'italic'
+    },
+    noMessagesTextAddChat: {
+        color: THEME.OWN_MESSAGE_NAME_COLOR,
         fontSize: THEME.FONT35,
         fontStyle: 'italic'
     },
