@@ -123,7 +123,7 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
                 </View>
                 <Chat isReplyArrived={ isReplyArrived }/>
                 <InputField clearChat={ clearChat } sendMessageToChat={ sendMessageToChat } isReplyArrived={ isReplyArrived } />
-                <SideMenu ref={ childRef } />
+                <SideMenu ref={ childRef } forceUpdate={ forceUpdate }/>
             </View>
         </GestureDetector>
     )

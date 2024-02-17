@@ -104,23 +104,26 @@ const SideMenu = ( props, ref ) => {
         const items = chatsModels.map(( element, key ) => {
             return (
                 <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) } key={ key }>
-                    <View>
-                        <View style={ styles.sideMenuItemHeader } >
-                            <Image style={ styles.messageIconImage } source = { chatIcons[ element ] } />
+                    <View style={ styles.sideMenuInfo } >
+                        <Image style={ styles.messageIconImage } source = { chatIcons[ element ] } />
+                        <View style={ styles.sideMenuText }>                       
                             <Text style={ styles.chatNameText }>
                                 { chatsSettings[ element ].chatName }
                             </Text>
+                            <Text style={ styles.firstMessageText }>
+                                { showFirstMessage( key ) }
+                            </Text>
                         </View>
-                        <Text style={ styles.firstMessageText }>
-                            { showFirstMessage( key ) }
-                        </Text>
-                    </View>    
+                    </View>
                     <View style={ styles.trashIconContainer }>
                         <Icon 
                             name={ 'trash-outline' } 
                             color={ THEME.TEXT_COLOR } 
-                            size={ 35 } 
-                            onPress={ () => dispatch( deleteChatAction( key ) ) }
+                            size={ 32 } 
+                            onPress={ () => { 
+                                dispatch( deleteChatAction( key ) );
+                                props.forceUpdate();
+                            }}
                         />
                     </View>
                 </Pressable>
@@ -179,41 +182,40 @@ const styles = StyleSheet.create({
     },
     sideMenuItems: {
         marginTop: hp('2%'),
+        marginLeft: 5,
+        marginRight: 5
     },
     sideMenuItem: {
-        marginRight: wp('1%'),
-        marginLeft: wp('1%'),
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         borderRadius: wp('3%'),
         marginBottom: 5,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 10
     },
-    sideMenuItemHeader: {
-        paddingTop: hp('1%'),
-        paddingLeft: wp('2%'),
+    sideMenuInfo: {
         flexDirection: 'row',
         alignItems: 'center',
     },
+    sideMenuText: {
+        marginLeft: 10
+    },
     messageIconImage: {
-        width: wp('7%'),
-        height: wp('7%')
+        width: wp('10%'),
+        height: wp('10%'),
     },
     chatNameText: {
         color: THEME.MESSAGE_NAME_COLOR,
         fontWeight: THEME.FONT_SEMIBOLD,
         fontSize: THEME.FONT28,
-        marginLeft: wp('2%')
     },
     firstMessageText: {
         color: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR,
         fontSize: THEME.FONT22,
         fontWeight: THEME.FONT_LIGHT,
-        paddingLeft: wp('11.1%'),
-        paddingBottom: hp('1%')
     },
     trashIconContainer: {
         alignSelf: 'center',
-        marginLeft: 5
     },
     sideMenuOverlay: {
         height: THEME.SCREEN_HEIGHT * 2,

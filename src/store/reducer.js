@@ -55,6 +55,7 @@ const clearChat = ( state ) => {
 }
 
 const deleteChat = ( state, chatIndex ) => {
+    console.log(chatIndex);
     const newState = { ...state };
 
     newState.chatsMessages.splice( chatIndex, 1 );
