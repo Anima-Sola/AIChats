@@ -36,3 +36,10 @@ export const deleteChatAction = ( chatIndex ) => {
         payload: chatIndex
     }
 }
+
+export const setCurrentChatAction = ( chatIndex ) => {
+    return {
+        type: 'SET_CURRENT_CHAT',
+        payload: chatIndex
+    }
+}

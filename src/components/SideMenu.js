@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons';
 import { getChatsModels, getChatsMessages, getChatsSettings, getCurrentChat } from '../store/selectors';
-import { deleteChatAction } from '../store/actions';
+import { deleteChatAction, setCurrentChatAction } from '../store/actions';
 import THEME from '../styles/theme';
 
 import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
@@ -102,8 +102,14 @@ const SideMenu = ( props, ref ) => {
         }
 
         const items = chatsModels.map(( element, key ) => {
+            const itemStyle = ( key === currentChat ) ? styles.currentSideMenuItem : styles.sideMenuItem;
+
             return (
-                <Pressable style={ THEME.SIDE_MENU_PRESSABLE_STYLE( styles.sideMenuItem ) } key={ key }>
+                <Pressable 
+                    style={ THEME.SIDE_MENU_PRESSABLE_STYLE( itemStyle ) } 
+                    key={ key }
+                    onPress={ () => dispatch( setCurrentChatAction( key ) ) }
+                >
                     <View style={ styles.sideMenuInfo } >
                         <Image style={ styles.messageIconImage } source = { chatIcons[ element ] } />
                         <View style={ styles.sideMenuText }>                       
@@ -189,6 +195,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         borderRadius: wp('3%'),
         marginBottom: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 10
+    },
+    currentSideMenuItem: {
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        borderRadius: wp('3%'),
+        marginBottom: 5,
+        borderColor: "#fff",
+        borderWidth: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 10

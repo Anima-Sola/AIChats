@@ -36,10 +36,16 @@ const Chat = ({ isReplyArrived }) => {
     
     if( !chatsMessages?.length ) {
         return (
-            <View style={{ ...styles.container, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={ styles.noMessagesText }>
-                    В чате нет сообщений...
-                </Text>
+            <View style={ styles.container }>
+                <View style={{ ...styles.messageContainer, backgroundColor: THEME.OWN_MESSAGE_BACKGROUND_COLOR }}>
+                    <View style={ styles.messageIconContainer }>
+                        <Image style={ styles.messageIconImage } source = { HumanIcon } />
+                    </View>
+                    <View style={ styles.messageTextContainer } >
+                        <Text style={{ ...styles.messageNameContainer, color: THEME.OWN_MESSAGE_NAME_COLOR }}> YOU </Text>
+                        <Text style={ styles.messageText } selectable={true}> В чате сообщений нет... </Text>
+                    </View>
+                </View>
             </View>
         )
     }

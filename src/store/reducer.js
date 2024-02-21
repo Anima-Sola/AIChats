@@ -55,11 +55,20 @@ const clearChat = ( state ) => {
 }
 
 const deleteChat = ( state, chatIndex ) => {
-    console.log(chatIndex);
     const newState = { ...state };
 
     newState.chatsMessages.splice( chatIndex, 1 );
     newState.chatsModels.splice( chatIndex, 1 );
+    if( chatIndex <= newState.currentChat ) newState.currentChat--;
+    if( newState.currentChat < 0 ) newState.currentChat = 0;
+
+    return saveState( newState );
+}
+
+const setCurrentChat =( state, chatIndex ) => {
+    const newState = { ...state };
+
+    newState.currentChat = chatIndex;
 
     return saveState( newState );
 }
@@ -79,6 +88,8 @@ const reducer = ( state = initialState, action ) => {
             return clearChat( state );
         case 'DELETE_CHAT':
             return deleteChat( state, action.payload );
+        case 'SET_CURRENT_CHAT':
+            return setCurrentChat( state, action.payload )
         default:
             return state;
     }

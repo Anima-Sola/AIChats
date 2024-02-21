@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
-import { View, StyleSheet, StatusBar, Text, BackHandler } from 'react-native';
+import { View, StyleSheet, StatusBar, Text, BackHandler, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
@@ -15,6 +15,10 @@ import SideMenu from '../components/SideMenu';
 import THEME from '../styles/theme';
 import { isNoChats } from '../components/CommonFuncs';
 
+import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
+import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
+import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
+
 const NoChats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
     return (
         <View style={ styles.container } >
@@ -22,7 +26,7 @@ const NoChats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
             <AddNewChatModal isVisible={ isNewChatModalVisible } setIsVisible={ setIsNewChatModalVisible } />
             <View style={ styles.header }>
                 <View style={{ ...styles.header_left_side, opacity: 0.3 }} >
-                    <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 40 } disabled={ true }/>
+                    <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 35 } disabled={ true }/>
                 </View>
                 <View style={ styles.header_right_side }>
                     <Icon.Button 
@@ -45,15 +49,16 @@ const NoChats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
     )
 }
 
-const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
+const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible, forceUpdate }) => {
     const [ isReplyArrived, setIsReplyArrived ] = useState( true );
     const childRef = useRef();
     const currentChat = useSelector( getCurrentChat );
     const chatModel = useSelector( getChatsModels )[ currentChat ];
-    const { api } = useSelector( getChatsSettings )[ chatModel ];
+    const chatsSettings = useSelector( getChatsSettings );
+    const { api } = chatsSettings[ chatModel ];
     const chatMessages = useSelector( getChatsMessages )[ currentChat ];
     const dispatch = useDispatch();
-    const [, forceUpdate ] = useReducer(x => x + 1, 0);
+    const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
 
     //Detect slide to the right to show side menu
     const flingRightGesture = Gesture.Fling()
@@ -104,7 +109,7 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
                 <AddNewChatModal isVisible={ isNewChatModalVisible } setIsVisible={ setIsNewChatModalVisible } />
                 <View style={ styles.header }>
                     <View style={ styles.header_left_side } >
-                        <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 40 } onPress={() => { childRef.current.showSideMenu() }}/>
+                        <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 35 } onPress={() => { childRef.current.showSideMenu() }}/>
                     </View>
                     <View style={ styles.header_right_side }>
                         <Icon.Button 
@@ -121,6 +126,10 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
                         <Icon style={ styles.settings_icon } name={ 'menu' } color={ THEME.TEXT_COLOR  } size={ 40 }/>
                     </View>
                 </View>
+                <View style={ styles.imageBackgroundContainer } >
+                    <Image source={ chatIcons[ chatModel ] } />
+                    <Text style={ styles.textBackground }>{ chatsSettings[ chatModel ].chatName }</Text>
+                </View> 
                 <Chat isReplyArrived={ isReplyArrived }/>
                 <InputField clearChat={ clearChat } sendMessageToChat={ sendMessageToChat } isReplyArrived={ isReplyArrived } />
                 <SideMenu ref={ childRef } forceUpdate={ forceUpdate }/>
@@ -130,13 +139,18 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
 }
 
 const MainChatScreen = () => {
+    const [, forceUpdate ] = useReducer(x => x + 1, 0);
     const [ isNewChatModalVisible, setIsNewChatModalVisible ] = useState( false );
 
     if( !isNoChats() ) {
         return <NoChats isNewChatModalVisible={ isNewChatModalVisible } setIsNewChatModalVisible={ setIsNewChatModalVisible } />
     }
 
-    return <Chats isNewChatModalVisible={ isNewChatModalVisible } setIsNewChatModalVisible={ setIsNewChatModalVisible } />
+    return <Chats 
+                isNewChatModalVisible={ isNewChatModalVisible } 
+                setIsNewChatModalVisible={ setIsNewChatModalVisible } 
+                forceUpdate={ forceUpdate }
+            />
     
 }
 
@@ -150,9 +164,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingTop: THEME.STATUSBAR_HEIGHT,
         backgroundColor: THEME.HEADER_BACKGROUND_COLOR,
-        paddingLeft: wp('4%'),
-        paddingRight: wp('4%'),
-        height: hp('12%'),
+        paddingLeft: 10,
+        paddingRight: 5,
+        height: hp('13%'),
     },
     header_left_side: {
         justifyContent: 'center'
@@ -162,28 +176,26 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         width: wp('50%'),
-        /*borderWidth: 1,
-        borderColor: '#fff'*/
     },
     add_chat_button_text_style: {
         color: THEME.ICON_COLOR,
         fontSize: THEME.FONT25,
-        marginLeft: wp('-1%'),
-        marginRight: wp('0.5%'),
     },
     settings_icon: {
-        marginLeft: wp('2%')
+        marginLeft: 10
+    },
+    imageBackgroundContainer: {
+        position: 'absolute',
+        top: hp('53%') - 110,
+        left: wp('50%') - 80,
+        alignItems: 'center',
+        opacity: 0.15,
+    },
+    textBackground: {
+        color: THEME.TEXT_COLOR,
+        fontSize: THEME.FONT35,
+        marginTop: 10
     }
 })
 
 export default MainChatScreen;
-
-
-                            /*<Button 
-                                type="outline"
-                                buttonStyle={ styles.add_chat_button_style }
-                                titleStyle={ styles.add_chat_title_style }
-                            >
-                                ADD
-                            </Button>*/
-                            /*<AddNewChatModal isVisible={ isNewChatModalVisible } setIsVisible={ setIsNewChatModalVisible } />*/
