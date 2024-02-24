@@ -37,12 +37,12 @@ const Chat = ({ isReplyArrived }) => {
     if( !chatsMessages?.length ) {
         return (
             <View style={ styles.container }>
-                <View style={{ ...styles.messageContainer, backgroundColor: THEME.OWN_MESSAGE_BACKGROUND_COLOR }}>
+                <View style={ styles.messageContainer }>
                     <View style={ styles.messageIconContainer }>
                         <Image style={ styles.messageIconImage } source = { HumanIcon } />
                     </View>
                     <View style={ styles.messageTextContainer } >
-                        <Text style={{ ...styles.messageNameContainer, color: THEME.OWN_MESSAGE_NAME_COLOR }}> YOU </Text>
+                        <Text style={{ ...styles.messageNameContainer, color: THEME.OWN_MESSAGE_NAME_COLOR }}> ВЫ </Text>
                         <Text style={ styles.messageText } selectable={true}> В чате сообщений нет... </Text>
                     </View>
                 </View>
@@ -57,19 +57,17 @@ const Chat = ({ isReplyArrived }) => {
         const items = chatsMessages.map(( element, key ) => {
             
             if(( key % 2 ) === 0 ) {
-                messageBackGroundColor = THEME.OWN_MESSAGE_BACKGROUND_COLOR;
                 messageIcon = HumanIcon;
-                messageName = 'YOU';
+                messageName = 'ВЫ';
                 messageNameColor = THEME.OWN_MESSAGE_NAME_COLOR;
             } else {
-                messageBackGroundColor = THEME.MESSAGE_BACKGROUND_COLOR;
                 messageIcon = chatIcons[ chatsSettings.iconNum ];
                 messageName = chatsSettings.chatName;
                 messageNameColor = THEME.MESSAGE_NAME_COLOR;
             }
 
             return (
-                <View style={{ ...styles.messageContainer, backgroundColor: messageBackGroundColor }} key={ key }>
+                <View style={ styles.messageContainer } key={ key }>
                     <View style={ styles.messageIconContainer }>
                         <Image style={ styles.messageIconImage } source = { messageIcon } />
                     </View>
@@ -141,7 +139,6 @@ const styles = StyleSheet.create({
     messageIconContainer: {
         width: wp('10%'),
         justifyContent: 'flex-start',
-        paddingTop: hp('0.3%')
     },
     messageIconImage: {
         width: wp('7%'),

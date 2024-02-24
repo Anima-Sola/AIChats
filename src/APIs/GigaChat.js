@@ -9,6 +9,7 @@ class GIGA_CHAT {
         this.API_URL = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions";  
         this.CLIENT_AUTH_DATA = config[ "gigachat-client-auth-data" ];
         this.SCOPE = config[ "gigachat-scope" ];
+        this.CLIENT_ID = config[ "gigachat-client-id" ];
         this.ACCESS_TOKEN_EXPIRES_AT = 0;
         this.ACCESS_TOKEN = '';
         this.model = "GigaChat:latest";

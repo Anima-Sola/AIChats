@@ -24,7 +24,7 @@ const AddNewChatModal = ({ isVisible, setIsVisible }) => {
                     style={ THEME.ADD_NEW_CHAT_MODAL_ITEM_PRESSABLE_STYLE( styles.item ) } 
                     key={ key }
                     onPress={ () => {
-                        dispatch( addNewChatAction( key ) );
+                        dispatch( addNewChatAction( key ));
                         setIsVisible( false );
                     }}
                 >

@@ -31,7 +31,7 @@ const NoChats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
                 <View style={ styles.header_right_side }>
                     <Icon.Button 
                         name='chatbubbles-outline' 
-                        size={ 25 } 
+                        size={ 20 } 
                         borderRadius={ 20 } 
                         backgroundColor={ THEME.OWN_MESSAGE_NAME_COLOR }
                         onPress={ () => setIsNewChatModalVisible( true ) }
@@ -114,7 +114,7 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible, forceUpdate })
                     <View style={ styles.header_right_side }>
                         <Icon.Button 
                             name='chatbubbles-outline' 
-                            size={ 25 } 
+                            size={ 20 } 
                             borderRadius={ 20 } 
                             backgroundColor={ THEME.OWN_MESSAGE_NAME_COLOR }
                             onPress={ () => setIsNewChatModalVisible( true ) }
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         backgroundColor: THEME.HEADER_BACKGROUND_COLOR,
         paddingLeft: 10,
         paddingRight: 5,
-        height: hp('13%'),
+        height: 80,
     },
     header_left_side: {
         justifyContent: 'center'

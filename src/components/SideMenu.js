@@ -19,7 +19,7 @@ const SideMenu = ( props, ref ) => {
     const dispatch = useDispatch();
     const currentChat = useSelector( getCurrentChat );
     const chatsModels = useSelector( getChatsModels );
-    const chatsMessages = useSelector( getChatsMessages )[ currentChat ];
+    const chatsMessages = useSelector( getChatsMessages );
     const chatsSettings = useSelector( getChatsSettings );
     const animSideMenu = useRef(new Animated.Value( - THEME.SCREEN_WIDTH )).current;
     const animOverlayOpacity = useRef(new Animated.Value(0)).current;
@@ -87,15 +87,15 @@ const SideMenu = ( props, ref ) => {
             hideSideMenu();
         });
 
-    const chatsList = () => {
+    const displayChatsList = () => {
         const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
 
         const showFirstMessage = ( key ) => {
-            if( !chatsMessages[ key ] || ( chatsMessages[ key ].length === 0 )) {
+            if( !chatsMessages[ key ][ 0 ] || ( chatsMessages[ key ][ 0 ].length === 0 )) {
                 return ( <>Cообщений нет...</> )
             }
 
-            let firstMessage = chatsMessages[ key ].slice( 0, 20 );
+            let firstMessage = chatsMessages[ key ][ 0 ].slice( 0, 20 );
             firstMessage += '...';
 
             return ( <>{ firstMessage }</> )
@@ -157,7 +157,7 @@ const SideMenu = ( props, ref ) => {
                     >
                         <Ionicons name="close-outline" size={ 40 } color= { THEME.SIDE_MENU_ITEMS_TEXT_COLOR } />
                     </Pressable>
-                    { chatsList() }
+                    { displayChatsList() }
                 </View>
                 <Pressable onPress={ hideSideMenu }>
                     <Animated.View style={{ ...styles.sideMenuOverlay, opacity: animOverlayOpacity }}>
@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
         marginRight: 5
     },
     sideMenuItem: {
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
         borderRadius: wp('3%'),
         marginBottom: 5,
         flexDirection: 'row',
@@ -200,7 +199,6 @@ const styles = StyleSheet.create({
         padding: 10
     },
     currentSideMenuItem: {
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
         borderRadius: wp('3%'),
         marginBottom: 5,
         borderColor: "#fff",

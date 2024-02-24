@@ -37,7 +37,7 @@ const InputField = ({ sendMessageToChat, clearChat, isReplyArrived }) => {
                 <Icon 
                     name={ 'send' } 
                     color={ THEME.ICON_COLOR  } 
-                    size={ 30 }
+                    size={ 25 }
                     disabled={ !isReplyArrived } 
                     onPress={ () => {
                         sendMessageToChat( message );
@@ -58,36 +58,27 @@ const styles = StyleSheet.create({
     },
     clearChatIcon: {
         width: wp('10%'),
+        minHeight: hp('6.5%'),
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingBottom: hp('0.5%'),
-        paddingLeft: wp('2%')
+        justifyContent: 'center'
     },
     input: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         width: wp('80%'),
-        paddingLeft: wp('2%'),
         minHeight: hp('6.5%')
     },
     textInput: {
+        width: '100%',
         fontSize: THEME.FONT28,
         color: THEME.INPUT_LINE_TEXT_COLOR,
-        width: wp('77%'),
-        paddingTop: hp('1%'),
-        paddingBottom: hp('1%'),
     },
     sendTextVoice: {
         width: wp('10%'),
+        minHeight: hp('6.5%'),
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingRight: wp('2%'),
-        paddingBottom: hp('0.8%')
-    },
-    text: {
-        color: THEME.TEXT_COLOR,
-        fontSize: THEME.FONT50
+        justifyContent: 'center'
     }
 })
 

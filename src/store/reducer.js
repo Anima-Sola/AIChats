@@ -35,6 +35,7 @@ const addNewChat = ( state, chatModel ) => {
     const newState = { ...state };
     newState.chatsMessages.push( [] );
     newState.chatsModels.push( chatModel );
+    newState.currentChat = newState.chatsModels.length - 1;
     return saveState( newState );
 }
 

@@ -15,9 +15,7 @@ const THEME = {
     INPUT_LINE_TEXT_COLOR: '#FFFFFF',
     ICON_COLOR: '#FFFFFF',
     NAV_BAR_COLOR: '#000000',
-    OWN_MESSAGE_BACKGROUND_COLOR: '#000',
     OWN_MESSAGE_NAME_COLOR: '#605ba4',
-    MESSAGE_BACKGROUND_COLOR: '#000',
     MESSAGE_NAME_COLOR: '#10a37f',
     INPUT_COLOR: '#40414f',
     TEXT_COLOR: '#fff',
@@ -43,7 +41,7 @@ const THEME = {
         return (({ pressed }) => 
             [
                 { 
-                    backgroundColor: pressed ? '#4d3e3e': THEME.SIDE_MENU_BACKGROUND_COLOR,
+                    backgroundColor: pressed ? '#4d3e3e': THEME.MESSAGE_BACKGROUND_COLOR,
                 },
                 itemStyles
             ]
