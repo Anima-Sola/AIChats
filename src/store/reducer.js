@@ -77,10 +77,8 @@ const setCurrentChat =( state, chatIndex ) => {
 const reducer = ( state = initialState, action ) => {
     switch( action.type ) {
         case 'LOAD_APP_DATA':
-            saveDataToStore( 'APP_DATA', null );
-            return state;
-            //if ( action.payload ) return action.payload;
-            //return saveState( 'APP_DATA', initialState );
+            if ( action.payload.chatsSettings ) return action.payload;
+            return initialState;
         case 'ADD_NEW_CHAT':
             return addNewChat( state, action.payload );
         case 'SEND_MESSAGE_TO_CHAT':

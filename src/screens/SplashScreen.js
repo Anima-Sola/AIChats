@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useStore } from "react-redux";
+import { useDispatch } from "react-redux";
 import { View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import { loadAppDataAction, addNewChatAction } from '../store/actions';
+import { loadAppDataAction } from '../store/actions';
 
 SplashScreen.preventAutoHideAsync();
 
 const AppSplashScreen =({ navigation }) => {
     const dispatch = useDispatch();
-    const store = useStore();
     const [appIsReady, setAppIsReady] = useState(false);
 
     useEffect(() => {
@@ -27,7 +26,6 @@ const AppSplashScreen =({ navigation }) => {
 
     const onLayoutRootView = useCallback(async () => {
         if( appIsReady ) {
-            //if( store.getState().chatsMessages.length === 0 ) dispatch( addNewChatAction( 0 ) );
             navigation.navigate('MainChatScreen');
             await SplashScreen.hideAsync();
         }
