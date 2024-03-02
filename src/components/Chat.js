@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: hp('1%'),
-        marginBottom: hp('1%')
+        marginBottom: hp('1%'),
+        marginLeft: wp('1%'),
+        marginRight: wp('1%')
     },
     noMessagesText: {
         color: THEME.TEXT_COLOR,
@@ -139,13 +141,14 @@ const styles = StyleSheet.create({
     messageIconContainer: {
         width: wp('10%'),
         justifyContent: 'flex-start',
+        paddingTop: 2
     },
     messageIconImage: {
-        width: wp('7%'),
-        height: wp('7%')
+        width: wp('8%'),
+        height: wp('8%')
     },
     messageNameContainer: {
-        fontSize: THEME.FONT30
+        fontSize: THEME.FONT30,    
     },
     responseWaitingContainer: {
         marginLeft: wp('12%'),

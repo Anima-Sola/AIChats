@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     currentSideMenuItem: {
         borderRadius: wp('3%'),
         marginBottom: 5,
-        borderColor: "#fff",
+        borderColor: THEME.SIDE_MENU_CURRENT_ITEM_BORDER_COLOR,
         borderWidth: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',

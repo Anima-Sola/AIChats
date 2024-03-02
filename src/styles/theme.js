@@ -24,7 +24,8 @@ const THEME = {
     SCREEN_HEIGHT,
     SIDE_MENU_ITEMS_TEXT_COLOR: '#f6f6f6',
     SIDE_MENU_BACKGROUND_COLOR: '#242426',
-    SIDE_MENU_ITEM_BORDER_COLOR: '#fff',
+    SIDE_MENU_ITEM_BACKGROUND_COLOR: '#293133',
+    SIDE_MENU_CURRENT_ITEM_BORDER_COLOR: '#fff',
     SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR: '#fff',
     STATUSBAR_HEIGHT: StatusBar.currentHeight,
     FONT22: hp('2.2%') / fontScale,
@@ -41,7 +42,7 @@ const THEME = {
         return (({ pressed }) => 
             [
                 { 
-                    backgroundColor: pressed ? '#4d3e3e': THEME.MESSAGE_BACKGROUND_COLOR,
+                    backgroundColor: pressed ? '#4d3e3e': THEME.SIDE_MENU_ITEM_BACKGROUND_COLOR,
                 },
                 itemStyles
             ]
