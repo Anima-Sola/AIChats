@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
         backgroundColor: THEME.HEADER_BACKGROUND_COLOR,
         paddingLeft: 10,
         paddingRight: 5,
-        height: 80,
+        height: hp('13%'),
+        alignItems: 'center'
     },
     header_left_side: {
         justifyContent: 'center'

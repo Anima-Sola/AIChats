@@ -3,6 +3,7 @@ import { Text, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
 import THEME from '../styles/theme';
 import { isNoChats } from './CommonFuncs'; 
@@ -33,17 +34,18 @@ const Chat = ({ isReplyArrived }) => {
     const currentChatModel = useSelector( getChatsModels )[ currentChat ];
     const chatsMessages = useSelector( getChatsMessages )[ currentChat ];
     const chatsSettings = useSelector( getChatsSettings )[ currentChatModel ];
+    const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
     
     if( !chatsMessages?.length ) {
         return (
             <View style={ styles.container }>
                 <View style={ styles.messageContainer }>
-                    <View style={ styles.messageIconContainer }>
+                    <View style={ styles.messageHeader }>
                         <Image style={ styles.messageIconImage } source = { HumanIcon } />
+                        <Text style={{ ...styles.messageNameContainer, color: THEME.OWN_MESSAGE_NAME_COLOR }}>ВЫ</Text>
                     </View>
                     <View style={ styles.messageTextContainer } >
-                        <Text style={{ ...styles.messageNameContainer, color: THEME.OWN_MESSAGE_NAME_COLOR }}> ВЫ </Text>
-                        <Text style={ styles.messageText } selectable={true}> В чате сообщений нет... </Text>
+                        <Text style={ styles.messageText } selectable={true}>В чате сообщений нет...</Text>
                     </View>
                 </View>
             </View>
@@ -51,8 +53,7 @@ const Chat = ({ isReplyArrived }) => {
     }
 
     const displayMessages = () => {
-        let messageBackGroundColor, messageNameColor, messageIcon, messageName;
-        const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
+        let messageNameColor, messageIcon, messageName, messageBackgroundColor, paddingBottom;
 
         const items = chatsMessages.map(( element, key ) => {
             
@@ -60,20 +61,31 @@ const Chat = ({ isReplyArrived }) => {
                 messageIcon = HumanIcon;
                 messageName = 'ВЫ';
                 messageNameColor = THEME.OWN_MESSAGE_NAME_COLOR;
+                paddingBottom = 0;
             } else {
                 messageIcon = chatIcons[ chatsSettings.iconNum ];
                 messageName = chatsSettings.chatName;
                 messageNameColor = THEME.MESSAGE_NAME_COLOR;
+                messageBackgroundColor =  'rgba(255, 255, 255, 0.1)';
+                paddingBottom = 10;
             }
 
             return (
-                <View style={ styles.messageContainer } key={ key }>
-                    <View style={ styles.messageIconContainer }>
+                <View style={{ ...styles.messageContainer, backgroundColor: messageBackgroundColor, paddingBottom }} key={ key }>
+                    <View style={ styles.messageHeader }>
                         <Image style={ styles.messageIconImage } source = { messageIcon } />
+                        <Text style={{ ...styles.messageNameContainer, color: messageNameColor }}>{ messageName }</Text>
                     </View>
                     <View style={ styles.messageTextContainer } >
-                        <Text style={{ ...styles.messageNameContainer, color: messageNameColor }}>{ messageName }</Text>
                         <Text style={ styles.messageText } selectable={true}>{ element }</Text>
+                    </View>
+                    <View style={ styles.icons }>
+                        <View style={ styles.iconWrapper }>
+                            <Icon name={ 'copy-outline' } color={ THEME.TEXT_COLOR } size={ hp('3.5%') } disabled={ true }/>
+                        </View>
+                        <View style={ styles.iconWrapper }>
+                            <Icon name={ 'share-social' } color={ THEME.TEXT_COLOR } size={ hp('3.5%') } disabled={ true }/>
+                        </View>
                     </View>
                 </View>
             )
@@ -115,8 +127,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: hp('1%'),
         marginBottom: hp('1%'),
-        marginLeft: wp('1%'),
-        marginRight: wp('1%')
     },
     noMessagesText: {
         color: THEME.TEXT_COLOR,
@@ -128,44 +138,60 @@ const styles = StyleSheet.create({
         fontSize: THEME.FONT35,
         fontStyle: 'italic'
     },
-    messageText: {
-        color: THEME.TEXT_COLOR,
-        fontSize: THEME.FONT22
-    },
     messageContainer: {
-        width: wp('96%'),
-        alignSelf: 'center',
-        flexDirection: 'row',
-        marginBottom: hp('2%')
+        width: '100%',
+        marginBottom: hp('3%'),
+        padding: 5,
     },
-    messageIconContainer: {
+    messageHeader: {
+        width: '100%',
+        flexDirection: 'row'
+    },
+    messageNameContainer: {
+        fontSize: THEME.FONT30,
+        paddingLeft: 10,
+        alignSelf: 'center',
+    },
+    messageChatIconContainer: {
         width: wp('10%'),
-        justifyContent: 'flex-start',
-        paddingTop: 2
+    },
+    icons: {
+        marginLeft: wp('8%'),
+        flexDirection: 'row',
+        paddingLeft: 10,
+        marginTop: 10
+    },
+    iconWrapper: {
+        paddingRight: 15
     },
     messageIconImage: {
         width: wp('8%'),
-        height: wp('8%')
+        height: wp('8%'),
+        alignSelf: 'center'
     },
-    messageNameContainer: {
-        fontSize: THEME.FONT30,    
+    messageText: {
+        color: THEME.TEXT_COLOR,
+        fontSize: THEME.FONT22,
+        marginLeft: wp('8%'),
+        paddingLeft: 10,
     },
     responseWaitingContainer: {
-        marginLeft: wp('12%'),
+        marginLeft: wp('8%'),
         flexDirection: 'row',
         justifyContent: 'flex-start',
+        paddingLeft: 10,
     },
     responseWaitingText: {
         fontStyle: 'italic',
         fontSize: THEME.FONT22,
         color: THEME.TEXT_COLOR,
+        paddingLeft: 10,
     },
     dots: {
-        marginTop: hp('1.5%')
+        marginTop: hp('1.5%'),
     },
     messageTextContainer: {
-        width: wp('86%'),
-        justifyContent: 'flex-start'
+        //marginTop: 5
     }
 })
 
