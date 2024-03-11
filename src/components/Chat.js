@@ -1,6 +1,7 @@
-import React from 'react';
-import { Text, ScrollView, StyleSheet, View, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Text, ScrollView, StyleSheet, View, Image, Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import * as Clipboard from 'expo-clipboard';
 import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -14,6 +15,7 @@ import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
 import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const Chat = ({ isReplyArrived }) => {
+    const [ copyHintOpacity, setCopyHintOpacity ] = useState( 0 );
 
     console.log('render');
 
@@ -52,6 +54,12 @@ const Chat = ({ isReplyArrived }) => {
         )
     }
 
+    const copyToClipboard = async ( str ) => {
+        await Clipboard.setStringAsync( str );
+        setCopyHintOpacity( 1 );
+        setTimeout( () => setCopyHintOpacity( 0 ), 500 );
+    };
+
     const displayMessages = () => {
         let messageNameColor, messageIcon, messageName, messageBackgroundColor, paddingBottom;
 
@@ -80,9 +88,9 @@ const Chat = ({ isReplyArrived }) => {
                         <Text style={ styles.messageText } selectable={true}>{ element }</Text>
                     </View>
                     <View style={ styles.icons }>
-                        <View style={ styles.iconWrapper }>
+                        <Pressable style={ styles.iconWrapper } onPress={ () => copyToClipboard( element ) }>
                             <Icon name={ 'copy-outline' } color={ THEME.TEXT_COLOR } size={ hp('3.5%') } disabled={ true }/>
-                        </View>
+                        </Pressable>
                         <View style={ styles.iconWrapper }>
                             <Icon name={ 'share-social' } color={ THEME.TEXT_COLOR } size={ hp('3.5%') } disabled={ true }/>
                         </View>
@@ -114,6 +122,9 @@ const Chat = ({ isReplyArrived }) => {
     
     return (
         <View style={ styles.container }>
+            <View style={{ ...styles.copyHintContainer, opacity: copyHintOpacity }}>
+                <Text style={ styles.copyHint }>Скопировано</Text>
+            </View>
             <ScrollView>
                 { displayMessages() }
                 { showDotIndicator() }
@@ -192,6 +203,20 @@ const styles = StyleSheet.create({
     },
     messageTextContainer: {
         //marginTop: 5
+    },
+    copyHintContainer: {
+        position: 'absolute',
+        backgroundColor: THEME.TEXT_COLOR,
+        color: THEME.MAIN_BACKGROUND_COLOR,
+        padding: 5,
+        borderRadius: 20,
+        top: '5%',
+        width: '30%',
+        left: '35%',
+    },
+    copyHint: {
+        fontSize: THEME.FONT22,
+        alignSelf: 'center'
     }
 })
 
