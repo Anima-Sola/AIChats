@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
     clearChatIcon: {
         width: wp('10%'),
-        minHeight: hp('6.5%'),
+        minHeight: THEME.MIN_INPUT_FIELD_HEIGHT,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: wp('80%'),
-        minHeight: hp('6.5%')
+        minHeight: THEME.MIN_INPUT_FIELD_HEIGHT
     },
     textInput: {
         width: '100%',
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     },
     sendTextVoice: {
         width: wp('10%'),
-        minHeight: hp('6.5%'),
+        minHeight: THEME.MIN_INPUT_FIELD_HEIGHT,
         alignItems: 'center',
         justifyContent: 'center'
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Text, ScrollView, StyleSheet, View, Image, Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Clipboard from 'expo-clipboard';
@@ -7,7 +7,8 @@ import { DotIndicator } from 'react-native-indicators';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
 import THEME from '../styles/theme';
-import { isNoChats } from './CommonFuncs'; 
+import { isNoChats } from './CommonFuncs';
+import AnimatedIcon from './AnimatedIcon';
 
 import HumanIcon from '../assets/ChatIcons/HumanIcon.png';
 import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
@@ -15,6 +16,7 @@ import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
 import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
 const Chat = ({ isReplyArrived }) => {
+    const scrollViewRef = useRef();
     const [ copyHintOpacity, setCopyHintOpacity ] = useState( 0 );
 
     console.log('render');
@@ -61,7 +63,7 @@ const Chat = ({ isReplyArrived }) => {
     };
 
     const displayMessages = () => {
-        let messageNameColor, messageIcon, messageName, messageBackgroundColor, paddingBottom;
+        let messageNameColor, messageIcon, messageName, messageBackgroundColor;
 
         const items = chatsMessages.map(( element, key ) => {
             
@@ -69,17 +71,16 @@ const Chat = ({ isReplyArrived }) => {
                 messageIcon = HumanIcon;
                 messageName = 'ВЫ';
                 messageNameColor = THEME.OWN_MESSAGE_NAME_COLOR;
-                paddingBottom = 0;
+                messageBackgroundColor =  'rgba(255, 255, 255, 0)';
             } else {
                 messageIcon = chatIcons[ chatsSettings.iconNum ];
                 messageName = chatsSettings.chatName;
                 messageNameColor = THEME.MESSAGE_NAME_COLOR;
                 messageBackgroundColor =  'rgba(255, 255, 255, 0.1)';
-                paddingBottom = 10;
             }
 
             return (
-                <View style={{ ...styles.messageContainer, backgroundColor: messageBackgroundColor, paddingBottom }} key={ key }>
+                <View style={{ ...styles.messageContainer, backgroundColor: messageBackgroundColor }} key={ key }>
                     <View style={ styles.messageHeader }>
                         <Image style={ styles.messageIconImage } source = { messageIcon } />
                         <Text style={{ ...styles.messageNameContainer, color: messageNameColor }}>{ messageName }</Text>
@@ -88,12 +89,18 @@ const Chat = ({ isReplyArrived }) => {
                         <Text style={ styles.messageText } selectable={true}>{ element }</Text>
                     </View>
                     <View style={ styles.icons }>
-                        <Pressable style={ styles.iconWrapper } onPress={ () => copyToClipboard( element ) }>
-                            <Icon name={ 'copy-outline' } color={ THEME.TEXT_COLOR } size={ hp('3.5%') } disabled={ true }/>
-                        </Pressable>
-                        <View style={ styles.iconWrapper }>
-                            <Icon name={ 'share-social' } color={ THEME.TEXT_COLOR } size={ hp('3.5%') } disabled={ true }/>
-                        </View>
+                        <AnimatedIcon 
+                            name={ 'copy-outline' } 
+                            color={ THEME.TEXT_COLOR } 
+                            size={ hp('3.5%') } 
+                            onPressFunc={ () => copyToClipboard( element ) }
+                        />
+                        <AnimatedIcon 
+                            name={ 'share-social' } 
+                            color={ THEME.TEXT_COLOR } 
+                            size={ hp('3.5%') } 
+                            onPressFunc={ () => {} }
+                        />
                     </View>
                 </View>
             )
@@ -125,7 +132,7 @@ const Chat = ({ isReplyArrived }) => {
             <View style={{ ...styles.copyHintContainer, opacity: copyHintOpacity }}>
                 <Text style={ styles.copyHint }>Скопировано</Text>
             </View>
-            <ScrollView>
+            <ScrollView ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })} >
                 { displayMessages() }
                 { showDotIndicator() }
             </ScrollView>
@@ -151,8 +158,8 @@ const styles = StyleSheet.create({
     },
     messageContainer: {
         width: '100%',
-        marginBottom: hp('3%'),
         padding: 5,
+        paddingBottom: 10
     },
     messageHeader: {
         width: '100%',
@@ -210,9 +217,9 @@ const styles = StyleSheet.create({
         color: THEME.MAIN_BACKGROUND_COLOR,
         padding: 5,
         borderRadius: 20,
-        top: '5%',
-        width: '30%',
-        left: '35%',
+        top: hp('5%'),
+        width: wp('40%'),
+        left: wp('30%'),
     },
     copyHint: {
         fontSize: THEME.FONT22,

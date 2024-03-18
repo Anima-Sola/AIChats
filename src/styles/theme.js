@@ -4,11 +4,27 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 const {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
+} = Dimensions.get('screen');
 
 const fontScale = PixelRatio.getFontScale();
+const ratio = PixelRatio.get();
+
+let headerHeightPersentage, inputLineHeight;
+
+if( SCREEN_HEIGHT * ratio < 1300 ) {
+    headerHeightPersentage = '12%';
+    inputLineHeight = '6.5%';
+} else if ( SCREEN_HEIGHT * ratio < 2500 ) {
+    headerHeightPersentage = '10%';
+    inputLineHeight = '5.5%';
+} else {
+    headerHeightPersentage = '12%';
+    inputLineHeight = '5.5%';
+}
 
 const THEME = {
+    HEADER_HEIGHT: hp( headerHeightPersentage ),
+    MIN_INPUT_FIELD_HEIGHT: hp( inputLineHeight ),
     MAIN_BACKGROUND_COLOR: "#000000",
     HEADER_BACKGROUND_COLOR: '#232325',
     INPUT_LINE_BACKGROUND_COLOR: '#232325',
@@ -20,10 +36,12 @@ const THEME = {
     INPUT_COLOR: '#40414f',
     TEXT_COLOR: '#fff',
     ADD_NEW_CHAT_MODAL_BACKGROUND_COLOR: '#fff',
+    ADD_NEW_CHAT_BUTTON_PRESSED_BACKGROUND_COLOR: '#7672b0',
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     SIDE_MENU_ITEMS_TEXT_COLOR: '#f6f6f6',
     SIDE_MENU_BACKGROUND_COLOR: '#242426',
+    SIDE_MENU_PRESSED_BACKGROUND_COLOR: '#4d3e3e',
     SIDE_MENU_ITEM_BACKGROUND_COLOR: '#293133',
     SIDE_MENU_CURRENT_ITEM_BORDER_COLOR: '#fff',
     SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR: '#fff',
@@ -42,7 +60,7 @@ const THEME = {
         return (({ pressed }) => 
             [
                 { 
-                    backgroundColor: pressed ? '#4d3e3e': THEME.SIDE_MENU_ITEM_BACKGROUND_COLOR,
+                    backgroundColor: pressed ? THEME.SIDE_MENU_PRESSED_BACKGROUND_COLOR: THEME.SIDE_MENU_ITEM_BACKGROUND_COLOR,
                 },
                 itemStyles
             ]
@@ -53,6 +71,17 @@ const THEME = {
             [
                 { 
                     backgroundColor: pressed ? THEME.OWN_MESSAGE_NAME_COLOR: THEME.ADD_NEW_CHAT_MODAL_BACKGROUND_COLOR,
+                    color: THEME.TEXT_COLOR
+                },
+                itemStyles
+            ]
+        )
+    },
+    ADD_NEW_CHAT_BUTTON_PRESSABLE_STYLE: ( itemStyles ) => {
+        return (({ pressed }) => 
+            [
+                { 
+                    backgroundColor: pressed ? THEME.ADD_NEW_CHAT_BUTTON_PRESSED_BACKGROUND_COLOR: THEME.OWN_MESSAGE_NAME_COLOR,
                     color: THEME.TEXT_COLOR
                 },
                 itemStyles

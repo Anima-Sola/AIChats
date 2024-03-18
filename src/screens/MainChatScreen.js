@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
-import { View, StyleSheet, StatusBar, Text, BackHandler, Image } from 'react-native';
+import { View, StyleSheet, StatusBar, Text, BackHandler, Image, Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
 import { Directions, GestureDetector, Gesture } from "react-native-gesture-handler";
@@ -109,21 +109,19 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible, forceUpdate })
                 <AddNewChatModal isVisible={ isNewChatModalVisible } setIsVisible={ setIsNewChatModalVisible } />
                 <View style={ styles.header }>
                     <View style={ styles.header_left_side } >
-                        <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 35 } onPress={() => { childRef.current.showSideMenu() }}/>
+                        <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ wp('9%') } onPress={() => { childRef.current.showSideMenu() }}/>
                     </View>
                     <View style={ styles.header_right_side }>
-                        <Icon.Button 
-                            name='chatbubbles-outline' 
-                            size={ 20 } 
-                            borderRadius={ 20 } 
-                            backgroundColor={ THEME.OWN_MESSAGE_NAME_COLOR }
+                        <Pressable
+                            style={ THEME.ADD_NEW_CHAT_BUTTON_PRESSABLE_STYLE( styles.addChatButtonContainer )}
                             onPress={ () => setIsNewChatModalVisible( true ) }
-                        >
+                        >   
+                            <Icon style={ styles.settings_icon } name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR  } size={ 20 }/>
                             <Text style={ styles.add_chat_button_text_style }>
                                 Add Chat
                             </Text>
-                        </Icon.Button>
-                        <Icon style={ styles.settings_icon } name={ 'menu' } color={ THEME.TEXT_COLOR  } size={ 40 }/>
+                        </Pressable>
+                        <Icon style={ styles.settings_icon } name={ 'menu' } color={ THEME.TEXT_COLOR  } size={ wp('10.5%') }/>
                     </View>
                 </View>
                 <View style={ styles.imageBackgroundContainer } >
@@ -166,8 +164,9 @@ const styles = StyleSheet.create({
         backgroundColor: THEME.HEADER_BACKGROUND_COLOR,
         paddingLeft: 10,
         paddingRight: 5,
-        height: hp('13%'),
-        alignItems: 'center'
+        height: THEME.HEADER_HEIGHT,
+        alignItems: 'center',
+        paddingBottom: 5
     },
     header_left_side: {
         justifyContent: 'center'
@@ -180,7 +179,15 @@ const styles = StyleSheet.create({
     },
     add_chat_button_text_style: {
         color: THEME.ICON_COLOR,
-        fontSize: THEME.FONT25,
+        fontSize: THEME.FONT22,
+        marginLeft: 5,
+        marginRight: 5
+    },
+    addChatButtonContainer: {
+        borderRadius: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 8
     },
     settings_icon: {
         marginLeft: 10
