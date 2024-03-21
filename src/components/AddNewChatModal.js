@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Modal, StyleSheet, Pressable, Image, Text } from 'react-native';
+import { View, Modal, StyleSheet, Pressable, Image, Text, Platform } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@rneui/themed";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';

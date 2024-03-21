@@ -1,13 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { Text, ScrollView, StyleSheet, View, Image, Pressable } from 'react-native';
+import React, { useState, useRef, Share } from 'react';
+import { Text, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Clipboard from 'expo-clipboard';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
 import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
 import THEME from '../styles/theme';
-import { isNoChats } from './CommonFuncs';
+import { isNoChats, isSharingPossible } from './CommonFuncs';
 import AnimatedIcon from './AnimatedIcon';
 
 import HumanIcon from '../assets/ChatIcons/HumanIcon.png';
@@ -62,6 +63,32 @@ const Chat = ({ isReplyArrived }) => {
         setTimeout( () => setCopyHintOpacity( 0 ), 500 );
     };
 
+    const shareMessage = async ( message ) => {
+        const fileName = FileSystem.documentDirectory + "message-" + Date.now() + ".txt";
+        await FileSystem.writeAsStringAsync(fileName, message);
+
+        try {
+            await Sharing.shareAsync( fileName );
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+
+    const showShareIcon = ( message ) => {
+        if( isSharingPossible() ) {
+            return (
+                <AnimatedIcon 
+                    name={ 'share-social' } 
+                    color={ THEME.TEXT_COLOR } 
+                    size={ hp('3.5%') } 
+                    onPressFunc={ () => shareMessage( message ) }
+                />
+            )
+        }
+
+        return <></>;
+    };
+
     const displayMessages = () => {
         let messageNameColor, messageIcon, messageName, messageBackgroundColor;
 
@@ -95,12 +122,7 @@ const Chat = ({ isReplyArrived }) => {
                             size={ hp('3.5%') } 
                             onPressFunc={ () => copyToClipboard( element ) }
                         />
-                        <AnimatedIcon 
-                            name={ 'share-social' } 
-                            color={ THEME.TEXT_COLOR } 
-                            size={ hp('3.5%') } 
-                            onPressFunc={ () => {} }
-                        />
+                        { showShareIcon( element ) }
                     </View>
                 </View>
             )
