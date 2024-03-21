@@ -95,7 +95,7 @@ const SideMenu = ( props, ref ) => {
                 return ( <>Cообщений нет...</> )
             }
 
-            let firstMessage = chatsMessages[ key ][ 0 ].slice( 0, 20 );
+            let firstMessage = chatsMessages[ key ][ 0 ].slice( 0, 16 );
             firstMessage += '...';
 
             return ( <>{ firstMessage }</> )

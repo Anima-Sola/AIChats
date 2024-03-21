@@ -17,7 +17,6 @@
     "axios": "^1.4.0",
     "expo": "^50.0.14",
     "expo-clipboard": "~5.0.1",
-    "expo-file-system": "~16.0.8",
     "expo-navigation-bar": "^2.8.1",
     "expo-sharing": "~11.10.0",
     "expo-splash-screen": "~0.26.4",

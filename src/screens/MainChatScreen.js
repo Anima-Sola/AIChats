@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
         top: hp('53%') - 110,
         left: wp('50%') - 80,
         alignItems: 'center',
-        opacity: 0.15,
+        opacity: 0.05,
     },
     textBackground: {
         color: THEME.TEXT_COLOR,

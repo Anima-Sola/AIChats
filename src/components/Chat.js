@@ -1,9 +1,7 @@
-import React, { useState, useRef, Share } from 'react';
-import { Text, ScrollView, StyleSheet, View, Image } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { Text, ScrollView, StyleSheet, View, Image, Share } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Clipboard from 'expo-clipboard';
-import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system';
 import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
@@ -64,13 +62,10 @@ const Chat = ({ isReplyArrived }) => {
     };
 
     const shareMessage = async ( message ) => {
-        const fileName = FileSystem.documentDirectory + "message-" + Date.now() + ".txt";
-        await FileSystem.writeAsStringAsync(fileName, message);
-
         try {
-            await Sharing.shareAsync( fileName );
-        } catch (error) {
-            console.error('Error sharing:', error);
+            await Share.share({ message });
+        } catch ( error ) {
+            alert( "Невозможно поделиться сообщением!" );
         }
     };
 

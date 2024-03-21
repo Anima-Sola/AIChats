@@ -15,7 +15,7 @@ if( SCREEN_HEIGHT * ratio < 1300 ) {
     headerHeightPersentage = '12%';
     inputLineHeight = '6.5%';
 } else if ( SCREEN_HEIGHT * ratio < 2500 ) {
-    headerHeightPersentage = '10%';
+    headerHeightPersentage = '11%';
     inputLineHeight = '5.5%';
 } else {
     headerHeightPersentage = '12%';
