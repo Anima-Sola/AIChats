@@ -1,7 +1,7 @@
 //Side menu that opens by swipe right gesture
 import React, { useRef, useImperativeHandle, forwardRef } from 'react';
 import { useFocusEffect } from "@react-navigation/native";
-import { Text, View, StyleSheet, Animated, Pressable, Image } from 'react-native';
+import { Text, View, StyleSheet, Animated, Pressable, Image, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -23,6 +23,7 @@ const SideMenu = ( props, ref ) => {
     const chatsSettings = useSelector( getChatsSettings );
     const animSideMenu = useRef(new Animated.Value( - THEME.SCREEN_WIDTH )).current;
     const animOverlayOpacity = useRef(new Animated.Value(0)).current;
+    const scrollViewRef = useRef();
 
     useFocusEffect(() => {
         Animated.timing(
@@ -136,11 +137,7 @@ const SideMenu = ( props, ref ) => {
             )
         })
 
-        return (
-            <View style={ styles.sideMenuItems }>
-                { items }
-            </View>
-        )
+        return ( <>{ items }</>)
 
     }
     
@@ -149,15 +146,12 @@ const SideMenu = ( props, ref ) => {
         <GestureDetector gesture={ flingLeftGesture }>
             <Animated.View style={{ ...styles.sideMenuContainer, transform: [{ translateX: animSideMenu }] }}>
                 <View style={ styles.sideMenu }>
-                    <Pressable 
-                        onPress={ () => {
-                            hideSideMenu();
-                        }} 
-                        style={ styles.closeMenuCross }
-                    >
-                        <Ionicons name="close-outline" size={ 40 } color= { THEME.SIDE_MENU_ITEMS_TEXT_COLOR } />
-                    </Pressable>
-                    { displayChatsList() }
+                    <View style={ styles.closeMenuCross }>
+                        <Ionicons name="close-outline" size={ 40 } color= { THEME.SIDE_MENU_ITEMS_TEXT_COLOR } onPress={ () => hideSideMenu() }/>
+                    </View>
+                    <ScrollView style={ styles.sideMenuItems } ref={ scrollViewRef } onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
+                        { displayChatsList() }
+                    </ScrollView>
                 </View>
                 <Pressable onPress={ hideSideMenu }>
                     <Animated.View style={{ ...styles.sideMenuOverlay, opacity: animOverlayOpacity }}>
@@ -178,18 +172,19 @@ const styles = StyleSheet.create({
         height: THEME.SCREEN_HEIGHT * 2,
     },
     sideMenu: {
-        height: THEME.SCREEN_HEIGHT * 2,
+        height: THEME.SCREEN_HEIGHT - THEME.HEADER_HEIGHT + THEME.MIN_INPUT_FIELD_HEIGHT - 5,
         width: THEME.SCREEN_WIDTH * 0.7,
         backgroundColor: THEME.SIDE_MENU_BACKGROUND_COLOR,
         paddingTop: THEME.STATUSBAR_HEIGHT,
     },
     closeMenuCross: {
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        paddingRight: 10
     },
     sideMenuItems: {
         marginTop: hp('2%'),
-        marginLeft: 5,
-        marginRight: 5
+        paddingLeft: 5,
+        paddingRight: 7,
     },
     sideMenuItem: {
         borderRadius: wp('3%'),

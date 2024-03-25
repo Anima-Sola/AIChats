@@ -16,10 +16,10 @@ if( SCREEN_HEIGHT * ratio < 1300 ) {
     inputLineHeight = '6.5%';
 } else if ( SCREEN_HEIGHT * ratio < 2500 ) {
     headerHeightPersentage = '11%';
-    inputLineHeight = '5.5%';
+    inputLineHeight = '6%';
 } else {
     headerHeightPersentage = '12%';
-    inputLineHeight = '5.5%';
+    inputLineHeight = '6%';
 }
 
 const THEME = {
@@ -35,7 +35,7 @@ const THEME = {
     MESSAGE_NAME_COLOR: '#10a37f',
     INPUT_COLOR: '#40414f',
     TEXT_COLOR: '#fff',
-    ADD_NEW_CHAT_MODAL_BACKGROUND_COLOR: '#fff',
+    ADD_NEW_CHAT_MODAL_BACKGROUND_COLOR: '#eddddd',
     ADD_NEW_CHAT_BUTTON_PRESSED_BACKGROUND_COLOR: '#7672b0',
     SCREEN_WIDTH,
     SCREEN_HEIGHT,

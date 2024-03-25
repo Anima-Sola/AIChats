@@ -14,7 +14,7 @@ class CHAT_GPT_3_5 {
             if(( key % 2 ) === 0) return { 'role': 'user', 'content': element }
             return { 'role': 'assistant', 'content': element }
         });
-        arrMessages.unshift({ 'role': 'system', 'content': 'You are a helpful assistant.' });
+        //arrMessages.unshift({ 'role': 'system', 'content': 'You are a helpful assistant.' });
         return arrMessages;
     }
 
@@ -31,7 +31,7 @@ class CHAT_GPT_3_5 {
                     "Content-Type": "application/json",
                     "Authorization": "Bearer " + this.API_KEY,
                 },
-                timeout: 3000
+                timeout: 30000
             }).then( function( response ) {
                 return completions = response?.data?.choices?.[0]?.message?.content;
             }).catch( function( error ){

@@ -100,15 +100,11 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: 15,
-        paddingRight: 15
+        paddingRight: 15,
     },
     itemIconImage: {
         width: wp('12%'),
         height: wp('12%')
-    },
-    separator: {
-        borderColor: '#000',
-        borderWidth: 1
     },
     itemIconText: {
         paddingLeft: 10,

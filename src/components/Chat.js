@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import * as Clipboard from 'expo-clipboard';
 import { useSelector } from 'react-redux';
 import { DotIndicator } from 'react-native-indicators';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { getChatsMessages, getChatsSettings, getCurrentChat, getChatsModels } from '../store/selectors';
 import THEME from '../styles/theme';
 import { isNoChats, isSharingPossible } from './CommonFuncs';
@@ -14,7 +15,7 @@ import ChatGPTIcon from '../assets/ChatIcons/ChatGPTicon.png';
 import GigaChatIcon from '../assets/ChatIcons/GigaChatIcon.png';
 import YandexGPTIcon from '../assets/ChatIcons/YandexGPTIcon.png';
 
-const Chat = ({ isReplyArrived }) => {
+const Chat = ({ isReplyArrived, setIsNewChatModalVisible }) => {
     const scrollViewRef = useRef();
     const [ copyHintOpacity, setCopyHintOpacity ] = useState( 0 );
 
@@ -23,12 +24,17 @@ const Chat = ({ isReplyArrived }) => {
     if( !isNoChats() ) {
         return (
             <View style={{ ...styles.container, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={ styles.noMessagesText }>
-                    Нажмите кнопку
-                </Text>
-                <Text style={ styles.noMessagesTextAddChat }>
-                    "Add Chat"
-                </Text>
+                <Icon.Button 
+                    name='chatbubbles-outline' 
+                    size={ 40 } 
+                    borderRadius={ 5 } 
+                    backgroundColor={ THEME.OWN_MESSAGE_NAME_COLOR }
+                    onPress={ () => setIsNewChatModalVisible( true ) }
+                >
+                    <Text style={ styles.add_chat_button_text_style }>
+                        НАЧАТЬ ДИАЛОГ
+                    </Text>
+                </Icon.Button>
             </View>
         )
     }
@@ -149,7 +155,7 @@ const Chat = ({ isReplyArrived }) => {
             <View style={{ ...styles.copyHintContainer, opacity: copyHintOpacity }}>
                 <Text style={ styles.copyHint }>Скопировано</Text>
             </View>
-            <ScrollView ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })} >
+            <ScrollView ref={ scrollViewRef } onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })} >
                 { displayMessages() }
                 { showDotIndicator() }
             </ScrollView>
@@ -172,6 +178,12 @@ const styles = StyleSheet.create({
         color: THEME.OWN_MESSAGE_NAME_COLOR,
         fontSize: THEME.FONT35,
         fontStyle: 'italic'
+    },
+    add_chat_button_text_style: {
+        color: THEME.ICON_COLOR,
+        fontSize: THEME.FONT30,
+        marginLeft: 5,
+        marginRight: 5
     },
     messageContainer: {
         width: '100%',
@@ -208,7 +220,7 @@ const styles = StyleSheet.create({
         color: THEME.TEXT_COLOR,
         fontSize: THEME.FONT22,
         marginLeft: wp('8%'),
-        paddingLeft: 10,
+        paddingLeft: 11,
     },
     responseWaitingContainer: {
         marginLeft: wp('8%'),
@@ -220,7 +232,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         fontSize: THEME.FONT22,
         color: THEME.TEXT_COLOR,
-        paddingLeft: 10,
+        paddingLeft: 7,
     },
     dots: {
         marginTop: hp('1.5%'),

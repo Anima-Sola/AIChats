@@ -14,7 +14,7 @@ class YANDEX_GPT {
             if(( key % 2 ) === 0) return { 'role': 'user', 'text': element }
             return { 'role': 'assistant', 'text': element }
         });
-        arrMessages.unshift({ 'role': 'system', 'text': 'Ты умный ассистент' });
+        //arrMessages.unshift({ 'role': 'system', 'text': 'Ты умный ассистент' });
         return arrMessages;
     }
 

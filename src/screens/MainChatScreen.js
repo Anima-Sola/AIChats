@@ -29,21 +29,10 @@ const NoChats = ({ isNewChatModalVisible, setIsNewChatModalVisible }) => {
                     <Icon name={ 'chatbubbles-outline' } color={ THEME.TEXT_COLOR } size={ 35 } disabled={ true }/>
                 </View>
                 <View style={ styles.header_right_side }>
-                    <Icon.Button 
-                        name='chatbubbles-outline' 
-                        size={ 20 } 
-                        borderRadius={ 20 } 
-                        backgroundColor={ THEME.OWN_MESSAGE_NAME_COLOR }
-                        onPress={ () => setIsNewChatModalVisible( true ) }
-                    >
-                        <Text style={ styles.add_chat_button_text_style }>
-                            Add Chat
-                        </Text>
-                    </Icon.Button>
-                    <Icon style={ styles.settings_icon } name={ 'menu' } color={ THEME.TEXT_COLOR  } size={ 40 }/>
+                    <Icon style={ styles.settings_icon } name={ 'settings-outline' } color={ THEME.TEXT_COLOR  } size={ 40 }/>
                 </View>
             </View>
-            <Chat isReplyArrived={ true }/>
+            <Chat isReplyArrived={ true } setIsNewChatModalVisible={ setIsNewChatModalVisible } />
             <InputField clearChat={ () => {} } sendMessageToChat={ () => {} } isReplyArrived={ false } />
         </View>
     )
@@ -71,6 +60,7 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible, forceUpdate })
     useEffect(() => {
         NavigationBar.setBackgroundColorAsync( THEME.NAV_BAR_COLOR );
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            //BackHandler.exitApp();
             return true;
         })
         return () => backHandler.remove();
@@ -121,14 +111,14 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible, forceUpdate })
                                 Add Chat
                             </Text>
                         </Pressable>
-                        <Icon style={ styles.settings_icon } name={ 'menu' } color={ THEME.TEXT_COLOR  } size={ wp('10.5%') }/>
+                        <Icon style={ styles.settings_icon } name={ 'settings-outline' } color={ THEME.TEXT_COLOR  } size={ wp('10.5%') }/>
                     </View>
                 </View>
                 <View style={ styles.imageBackgroundContainer } >
                     <Image source={ chatIcons[ chatModel ] } />
                     <Text style={ styles.textBackground }>{ chatsSettings[ chatModel ].chatName }</Text>
                 </View> 
-                <Chat isReplyArrived={ isReplyArrived }/>
+                <Chat isReplyArrived={ isReplyArrived } setIsNewChatModalVisible={ setIsNewChatModalVisible } />
                 <InputField clearChat={ clearChat } sendMessageToChat={ sendMessageToChat } isReplyArrived={ isReplyArrived } />
                 <SideMenu ref={ childRef } forceUpdate={ forceUpdate }/>
             </View>
@@ -184,7 +174,7 @@ const styles = StyleSheet.create({
         marginRight: 5
     },
     addChatButtonContainer: {
-        borderRadius: 20,
+        borderRadius: 5,
         flexDirection: 'row',
         alignItems: 'center',
         padding: 8
