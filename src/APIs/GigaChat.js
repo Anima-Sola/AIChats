@@ -4,7 +4,7 @@ import config from "../config/default.json";
 class GIGA_CHAT {
     constructor() {
         //this.RETRANSLATOR_URL = "http://192.168.1.94:3000";
-        this.RETRANSLATOR_URL = "http://d08c5964-cf45-4bba-9220-70045c862420.tunnel4.com";
+        this.RETRANSLATOR_URL = "http://da17749d-4783-4dd8-a39e-93a541e4d49a.tunnel4.com";
         this.TOKEN_ACCESS_URL = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth";
         this.API_URL = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions";  
         this.CLIENT_AUTH_DATA = config[ "gigachat-client-auth-data" ];

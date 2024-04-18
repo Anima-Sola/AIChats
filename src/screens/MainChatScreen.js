@@ -47,7 +47,7 @@ const Chats = ({ isNewChatModalVisible, setIsNewChatModalVisible, forceUpdate })
     const { api } = chatsSettings[ chatModel ];
     const chatMessages = useSelector( getChatsMessages )[ currentChat ];
     const dispatch = useDispatch();
-    const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
+    const chatIcons = [ ChatGPTIcon, ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
 
     //Detect slide to the right to show side menu
     const flingRightGesture = Gesture.Fling()
@@ -185,9 +185,9 @@ const styles = StyleSheet.create({
     imageBackgroundContainer: {
         position: 'absolute',
         top: hp('53%') - 110,
-        left: wp('50%') - 80,
+        width: '100%',
         alignItems: 'center',
-        opacity: 0.05,
+        opacity: 0.07,
     },
     textBackground: {
         color: THEME.TEXT_COLOR,

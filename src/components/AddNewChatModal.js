@@ -16,7 +16,7 @@ const AddNewChatModal = ({ isVisible, setIsVisible }) => {
     const chatsSettings = useSelector( getChatsSettings );
 
     const displayModelList = () => {
-        const chatsIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
+        const chatsIcons = [ ChatGPTIcon, ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
 
         const items = chatsSettings.map(( element, key ) => {
             return (

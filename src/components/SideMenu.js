@@ -89,7 +89,7 @@ const SideMenu = ( props, ref ) => {
         });
 
     const displayChatsList = () => {
-        const chatIcons = [ ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
+        const chatIcons = [ ChatGPTIcon, ChatGPTIcon, GigaChatIcon, YandexGPTIcon ];
 
         const showFirstMessage = ( key ) => {
             if( !chatsMessages[ key ][ 0 ] || ( chatsMessages[ key ][ 0 ].length === 0 )) {
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     chatNameText: {
         color: THEME.MESSAGE_NAME_COLOR,
         fontWeight: THEME.FONT_SEMIBOLD,
-        fontSize: THEME.FONT28,
+        fontSize: THEME.FONT25,
     },
     firstMessageText: {
         color: THEME.SIDE_MENU_FIRST_MESSAGE_TEXT_COLOR,

@@ -10,6 +10,12 @@ const initialState = {
             isDisabled: false
         },
         {
+            iconNum: 0,
+            chatName: 'ChatGPT-4-Turbo',
+            api: 'chatGpt4API',
+            isDisabled: false
+        },
+        {
             iconNum: 1,
             chatName: 'GigaChat',
             api: 'gigaChatAPI',
